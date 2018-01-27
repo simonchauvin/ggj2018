@@ -85,6 +85,11 @@ public class Boid : MonoBehaviour
         }
     }
 
+    public void applyNavfieldBehavior(Navfield navfield)
+    {
+        thisRigidbody.velocity += navfield.getForce(transform.position) * Time.deltaTime;
+    }
+
     public void showAlignmentDebug(Vector3 velocity)
     {
         Debug.DrawRay(transform.localPosition, velocity, Color.blue);

@@ -10,12 +10,15 @@ public class Flock : MonoBehaviour
     public float cohesionWeight;
     public float separationWeight;
 
+    private NavfieldManager navfieldManager;
 
     private Boid[] boids;
 
 
     void Start()
     {
+        navfieldManager = GameObject.FindObjectOfType<NavfieldManager>();
+
         boids = new Boid[numberOfBoids];
 
         for (int i = 0; i < numberOfBoids; i++)
@@ -47,6 +50,13 @@ public class Flock : MonoBehaviour
                 //boid.thisRigidbody.AddForce(align(boid) * alignmentWeight);
                 //boid.thisRigidbody.AddForce(cohere(boid) * cohesionWeight);
                 //boid.thisRigidbody.AddForce(separate(boid) * separationWeight);
+
+                // Navfields
+                Navfield navfield = navfieldManager.getNavfield(boid.transform.position);
+                if (navfield != null)
+                {
+                    boid.applyNavfieldBehavior(navfield);
+                }
             }
         }
     }
