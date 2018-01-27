@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class delayAnimation : MonoBehaviour {
+public class DelayAnimation : MonoBehaviour {
 
-    //Animator anim = GetComponent<Animator>();
+    //Animator anim = GameObject.Find("Bird").GetComponent<Animator>();
     //AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
     //anim.Play(state.fullPathHash, -1, Random.Range(0f,1f));
 
