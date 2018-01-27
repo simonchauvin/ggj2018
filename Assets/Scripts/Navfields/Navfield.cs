@@ -16,7 +16,7 @@ public class Navfield
 
     public Navfield(Flock flock, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
-        Create(flock.GetComponent<NavfieldManager>().transform.position, orientation, primitive, duration);
+        Create(flock.getLeader().transform.position, orientation, primitive, duration);
     }
 
     public Navfield(Boid leader, Quaternion orientation, NavFieldPrimitives primitive, float duration)
