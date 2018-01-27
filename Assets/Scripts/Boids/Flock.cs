@@ -10,6 +10,8 @@ public class Flock : MonoBehaviour
     public float alignmentWeight;
     public float cohesionWeight;
     public float separationWeight;
+    public float minAnimSpeed = 0.75f;
+    public float maxAnimSpeed = 1.25f;
 
     private Boid leader;
     private NavfieldManager navfieldManager;

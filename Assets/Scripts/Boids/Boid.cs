@@ -30,6 +30,7 @@ public class Boid : MonoBehaviour
         flock = GetComponentInParent<Flock>();
 
         // Init
+        GetComponent<Animator>().SetFloat("speedMultiplier", Random.Range(flock.minAnimSpeed, flock.maxAnimSpeed));
         transform.position = new Vector3(Random.value * 10f, Random.value * 10f, Random.value * 10f);
         //transform.position = new Vector3(Random.value * 10f, 0f, Random.value * 10f);
         thisRigidbody.velocity = new Vector3(Random.value * 2 - 1, Random.value * 2 - 1, Random.value * 2 - 1);
@@ -45,7 +46,7 @@ public class Boid : MonoBehaviour
     {
         if (GameManager.instance.debugNavfields && leader)
         {
-            GetComponent<MeshRenderer>().material.color = Color.cyan;
+            GetComponentInChildren<MeshRenderer>().material.color = Color.cyan;
         }
     }
 
