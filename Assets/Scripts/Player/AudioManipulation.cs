@@ -33,12 +33,11 @@ public class AudioManipulation
         distortionStart = 0f;
     }
     
-    public AudioManipulation(AudioSource pAudioSource, float lp, float hp, float d, int auv) {
+    public AudioManipulation(AudioSource pAudioSource, float lp, float hp, float d) {
         audioSource = pAudioSource;
         lowPassStart = lp;
         highPassStart = hp;
         distortionStart = d;
-        autoUpdateV = auv ;
     }
 
     public void initializeIt() {
