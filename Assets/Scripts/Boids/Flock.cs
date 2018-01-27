@@ -39,7 +39,7 @@ public class Flock : MonoBehaviour
             Boid boid = boids[i];
             if (boid != null && boid.thisRigidbody != null)
             {
-                Vector3 follow = follow(boid) * followWeight * Time.deltaTime;
+                //Vector3 follow = follow(boid) * followWeight * Time.deltaTime;
                 Vector3 alignment = align(boid) * alignmentWeight * Time.deltaTime;
                 Vector3 cohesion = cohere(boid) * cohesionWeight * Time.deltaTime;
                 Vector3 separation = separate(boid) * separationWeight * Time.deltaTime;
