@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManagerbck : MonoBehaviour {
 
     public Flock flock;
     private int[] leadersArray;
     private int[] gridsArray;
     private int version = 1;
 
-    //int[] codeKeys = new int[37];
+    int[] codeKeys = new int[37];
 
     struct BirdCommand
     {
@@ -24,9 +24,9 @@ public class PlayerManager : MonoBehaviour {
     void Start () {
         leadersArray = flock.getLeadersArray();
         gridsArray = flock.getGridsArray();
-        //createBinding();
+        createBinding();
     }
-	/*
+	
     void createBinding() {
         switch (version) {
             case 1:
@@ -39,13 +39,13 @@ public class PlayerManager : MonoBehaviour {
 
     void codeKeysCreationVersion1() {
         int c = 0;
-        //min letter first
+        /*min letter first*/
         for(int i = 97; i <= 122; i++) {
             codeKeys[c] = i;
             c++;
         }
 
-        //number then
+        /*number then*/
         for (int i = 48; i <= 57; i++) {
             codeKeys[c] = i;
             c++;
@@ -85,13 +85,17 @@ public class PlayerManager : MonoBehaviour {
             }
         }
     }
-    */
+
     // Update is called once per frame
     void Update () {
         
         foreach (char c in Input.inputString) {
-            Debug.Log(c.ToString());
+            if (binding.ContainsKey(c)) {
+                Debug.Log(c.ToString());
+                sendBirdCommand(binding[c]);
+            }
         }
+
     }
 
     void sendBirdCommand(int[] idLeaders, int[] idGrids) {
