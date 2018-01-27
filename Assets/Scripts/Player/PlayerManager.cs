@@ -20,7 +20,6 @@ public class PlayerManager : MonoBehaviour {
     private Dictionary<char,BirdCommand> binding = new Dictionary<char, BirdCommand>();
     private BirdCommand[] BirdsCommands = new BirdCommand[100];
 
-
     // Use this for initialization
     void Start () {
         leadersArray = flock.getLeadersArray();
@@ -85,33 +84,18 @@ public class PlayerManager : MonoBehaviour {
                 break;
             }
         }
-        //binding.Add('a', BirdsCommands[0]);
     }
 
     // Update is called once per frame
     void Update () {
+        
         foreach (char c in Input.inputString) {
             if (binding.ContainsKey(c)) {
                 Debug.Log(c.ToString());
                 sendBirdCommand(binding[c]);
             }
         }
-        /*
-            if (Input.GetKeyDown("a")) {
-            Debug.Log("a");
-            sendBirdCommand(binding["a"]);
-        }
-            //Instantiate(projectile, transform.position, transform.rotation);
 
-        if (Input.GetKeyDown("z")) {
-            Debug.Log("up");
-        }
-
-        if (Input.GetKeyDown("e")) {
-            Debug.Log("down");
-        }
-        //Instantiate(projectile, transform.position, transform.rotation);
-        */
     }
 
     void sendBirdCommand(int[] idLeaders, int[] idGrids) {
