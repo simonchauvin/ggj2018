@@ -119,4 +119,16 @@ public class Flock : MonoBehaviour
             return Vector3.zero;
         }
     }
+
+    public void transmissionListener(int[] idLeaders, int [] idGrids) {
+        string idL = ""; string idG = "";
+        foreach (var item in idLeaders) {
+            idL += item + ",";
+        }
+        foreach (var item in idGrids) {
+            idG += item + ",";
+        }
+
+        Debug.Log("idLeaders "+idL + " idGrids " + idG);
+    }
 }
