@@ -74,8 +74,9 @@ public class Flock : MonoBehaviour
                 float vely = boid.thisRigidbody.velocity.y + Time.fixedDeltaTime*peurDuSol * Mathf.Abs(Mathf.Min(0,boid.thisRigidbody.velocity.y));
                 if (peurDuSol > 0 && vely < 1.0f)
                     vely += 10.0f * Time.fixedDeltaTime;
+                float speed = boid.thisRigidbody.velocity.magnitude;
                 boid.thisRigidbody.velocity = new Vector3(boid.thisRigidbody.velocity.x, vely, boid.thisRigidbody.velocity.z);
-                debug1 = boid.thisRigidbody.velocity.y;
+                
             }
         }
     }
