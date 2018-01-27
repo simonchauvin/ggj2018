@@ -11,27 +11,60 @@ public class AudioManipulation
 
     public float minStep = 2000;
 
+    public IEnumerator fadeSound;
+
     float ecartMin = 100f;
+
+    public float startVolume = 1f;
+    public bool inFadeOut = false;
 
     public float lowPassStart;
     public float highPassStart;
     public float distortionStart;
+    public int autoUpdateV = 0;
+
+    public float amplitude;
+    public float ppStep;
 
     public AudioManipulation(AudioSource pAudioSource) {
         audioSource = pAudioSource;
-        lowPassStart = 500f;
-        highPassStart = 10;
+        lowPassStart = 10000f;
+        highPassStart = 2000f;
         distortionStart = 0f;
+    }
+    
+    public AudioManipulation(AudioSource pAudioSource, float lp, float hp, float d, int auv) {
+        audioSource = pAudioSource;
+        lowPassStart = lp;
+        highPassStart = hp;
+        distortionStart = d;
+        autoUpdateV = auv ;
     }
 
     public void initializeIt() {
         lowPass = audioSource.gameObject.AddComponent<AudioLowPassFilter>();
-        lowPass.cutoffFrequency = lowPassStart;
         highPass = audioSource.gameObject.AddComponent<AudioHighPassFilter>();
-        highPass.cutoffFrequency = highPassStart;
         distortion = audioSource.gameObject.AddComponent<AudioDistortionFilter>();
+        initializeParams();
+    }
+
+    public void initializeParams() {
+        audioSource.volume = startVolume;
+        lowPass.cutoffFrequency = lowPassStart;
+        highPass.cutoffFrequency = highPassStart;
         distortion.distortionLevel = distortionStart;
     }
+
+    public void startSound() {
+        initializeParams();
+        audioSource.Play();
+    }
+
+    /*
+    public void stopSound() {
+        
+        //audioSource.Stop();
+    }*/
 
     public float stepFunc(float entry) {
         float step = (((entry * entry) / 100000) + minStep) * Time.deltaTime;
@@ -133,9 +166,54 @@ public class AudioManipulation
             distortion.distortionLevel -= 0.2f * Time.deltaTime;
         }
     }
-
+    /*
     public void updateAutoChange() {
-        /* doing or not */
-        /*Mathf.PingPong(Time.time, 3);*/
-    }
+        switch (autoUpdateV) {
+            case 1:
+                amplitude = 0.2f;
+                ppStep = 1000f;
+                float pingpong = Mathf.PingPong(Time.time, amplitude);
+                if (highPass.cutoffFrequency + (pingpong - amplitude / 2f) * ppStep < 10f
+                    || lowPass.cutoffFrequency + (pingpong - amplitude / 2f) * ppStep > 22000f) {
+                } else {
+                    highPass.cutoffFrequency += (pingpong - amplitude / 2f) * ppStep;
+                    lowPass.cutoffFrequency += (pingpong - amplitude / 2f) * ppStep;
+                }
+             break;
+
+            case 2:
+                amplitude = 2f;
+                ppStep = 500;
+                float pingpong2 = Mathf.PingPong(Time.time, amplitude);
+                if (highPass.cutoffFrequency + (pingpong2 - amplitude / 2f) * ppStep < 10f
+                    || lowPass.cutoffFrequency + (pingpong2 - amplitude / 2f) * ppStep > 22000f) {
+                } else {
+                    highPass.cutoffFrequency += (pingpong2 - amplitude / 2f) * ppStep;
+                    lowPass.cutoffFrequency += (pingpong2 - amplitude / 2f) * ppStep;
+                }
+                break;
+        }
+     
+    }*/
 }
+
+public static class AudioFadeOut
+{
+
+    public static IEnumerator FadeOut(AudioManipulation AM, float FadeTime) {
+        AudioSource audioSource = AM.audioSource;
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0) {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume;
+        AM.inFadeOut = false;
+    }
+
+}
+
