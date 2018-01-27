@@ -17,7 +17,7 @@ public class Flock : MonoBehaviour
     private Boid[] boids;
 
 
-    void Start()
+    void Awake()
     {
         navfieldManager = GameObject.FindObjectOfType<NavfieldManager>();
 
