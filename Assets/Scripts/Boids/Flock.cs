@@ -131,4 +131,12 @@ public class Flock : MonoBehaviour
 
         Debug.Log("idLeaders "+idL + " idGrids " + idG);
     }
+
+    public int[] getLeadersArray() {
+        return new int[] { 1, 2, 3 };
+    }
+
+    public int[] getGridsArray() {
+        return new int[] {1,2,3,4,5};
+    }
 }

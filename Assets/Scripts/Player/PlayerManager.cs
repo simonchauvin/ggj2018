@@ -5,12 +5,19 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour {
 
     public Flock flock;
+    private int[] leadersArray;
+    private int[] gridsArray;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    // Use this for initialization
+    void Start () {
+        leadersArray = flock.getLeadersArray();
+        gridsArray = flock.getGridsArray();
+    }
 	
+    void createBinding() {
+
+    }
+
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown("a")) {
