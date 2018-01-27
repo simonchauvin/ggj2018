@@ -51,3 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16cdfcfcc55daa14483d989374cabe34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugBoids: 0
+  debugNavfields: 0
