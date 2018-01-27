@@ -76,7 +76,7 @@ public class Flock : MonoBehaviour
                     vely += 10.0f * Time.fixedDeltaTime;
                 float speed = boid.thisRigidbody.velocity.magnitude;
                 boid.thisRigidbody.velocity = new Vector3(boid.thisRigidbody.velocity.x, vely, boid.thisRigidbody.velocity.z);
-                
+                boid.thisRigidbody.velocity = boid.thisRigidbody.velocity.normalized * speed;
             }
         }
     }
