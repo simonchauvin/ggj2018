@@ -7,7 +7,6 @@ public class Boid : MonoBehaviour
     #region Parameters
     public float neighborRadius;
     public float desiredSeparation;
-    public bool debug;
     #endregion
 
     #region Components
@@ -16,7 +15,7 @@ public class Boid : MonoBehaviour
     private Transform separationArea;
     #endregion
 
-    private Flock flockManager;
+    private Flock flock;
 
 
     void Start()
@@ -27,7 +26,7 @@ public class Boid : MonoBehaviour
         separationArea = transform.Find("SeparationArea");
 
         // Flock
-        flockManager = GetComponentInParent<Flock>();
+        flock = GetComponentInParent<Flock>();
 
         // Init
         transform.position = new Vector3(Random.value * 10f, Random.value * 10f, Random.value * 10f);
@@ -46,7 +45,7 @@ public class Boid : MonoBehaviour
     {
         transform.rotation = Quaternion.LookRotation(thisRigidbody.velocity);
 
-        if (debug)
+        if (GameManager.instance.debugBoids)
         {
             neighborArea.gameObject.SetActive(true);
             separationArea.gameObject.SetActive(true);
@@ -83,6 +82,11 @@ public class Boid : MonoBehaviour
         {
             transform.localPosition = -transform.localPosition + (transform.localPosition - Vector3.zero).normalized;
         }
+    }
+
+    public void applyNavfieldBehavior(Navfield navfield)
+    {
+        thisRigidbody.velocity += navfield.getForce(transform.position) * Time.deltaTime;
     }
 
     public void showAlignmentDebug(Vector3 velocity)

@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4202602595322974}
   - component: {fileID: 114483471949879406}
+  - component: {fileID: 114319307713810836}
   m_Layer: 0
   m_Name: Flock
   m_TagString: Untagged
@@ -40,6 +41,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114319307713810836
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1439433141794576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb09527f4d812df42a8002d8ee461288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugPrefab: {fileID: 4097172632325438, guid: 9521d5af32963a74a800b8fbea9f7ac6,
+    type: 2}
 --- !u!114 &114483471949879406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -54,6 +68,7 @@ MonoBehaviour:
   boidPrefab: {fileID: 114186838184786216, guid: 23dc8ceeca37a3848ae999af4827d674,
     type: 2}
   numberOfBoids: 100
+  followWeight: 0
   alignmentWeight: 0.5
   cohesionWeight: 0.9
   separationWeight: 0.1

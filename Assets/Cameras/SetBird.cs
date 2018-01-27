@@ -16,8 +16,9 @@ public class SetBird : MonoBehaviour {
 	void Update () {
         if(Leader == null)
         {
-
-        }else
+            FlockSystem.GetComponent<Flock>().getLeader();
+        }
+        else
             ObjectTrackedByCamera.position = Leader.position;
 
     }

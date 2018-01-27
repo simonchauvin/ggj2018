@@ -287,8 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840d003db7b8af64ea88fb20294a4ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectTrackedByCamera: {fileID: 0}
-  FlockSystem: {fileID: 0}
+  ObjectTrackedByCamera: {fileID: 250123980}
+  FlockSystem: {fileID: 1235231810}
 --- !u!1 &1076699151
 GameObject:
   m_ObjectHideFlags: 3
@@ -416,6 +416,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca3b77109f02c7d419f23f43dc10bf04, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &1235231810 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4202602595322974, guid: ca3b77109f02c7d419f23f43dc10bf04,
+    type: 2}
+  m_PrefabInternal: {fileID: 1235231809}
 --- !u!1001 &1283684277
 Prefab:
   m_ObjectHideFlags: 0
