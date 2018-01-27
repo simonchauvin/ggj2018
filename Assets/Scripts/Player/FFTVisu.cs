@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(AudioListener))]
 
 public class FFTVisu : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -16,7 +16,7 @@ public class FFTVisu : MonoBehaviour {
         float[] spectrum = new float[256];
 
         AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
-
+        Debug.Log("here " + spectrum[0].ToString());
         for (int i = 1; i < spectrum.Length - 1; i++) {
             Debug.DrawLine(new Vector3(i - 1, spectrum[i] + 10, 0), new Vector3(i, spectrum[i + 1] + 10, 0), Color.red);
             Debug.DrawLine(new Vector3(i - 1, Mathf.Log(spectrum[i - 1]) + 10, 2), new Vector3(i, Mathf.Log(spectrum[i]) + 10, 2), Color.cyan);
