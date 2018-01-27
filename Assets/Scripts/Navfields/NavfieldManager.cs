@@ -50,6 +50,16 @@ public class NavfieldManager : MonoBehaviour
         }
     }
 
+    public void addNavfield(Boid leader, Quaternion orientation, NavFieldPrimitives primitive, float duration)
+    {
+        navfields.Add(new Navfield(leader, orientation, primitive, duration));
+        if (GameManager.instance.debugNavfields)
+        {
+            debugNavfields.Add(Instantiate<Transform>(debugPrefab));
+            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(Navfield.SIZE, Navfield.SIZE, Navfield.SIZE);
+        }
+    }
+
     public void addNavfield(Vector3 position, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
         navfields.Add(new Navfield(position, orientation, primitive, duration));

@@ -15,7 +15,17 @@ public class Navfield
     private float time;
 
 
+    public Navfield(Boid leader, Quaternion orientation, NavFieldPrimitives primitive, float duration)
+    {
+        Create(leader.transform.position, orientation, primitive, duration);
+    }
+
     public Navfield(Vector3 position, Quaternion orientation, NavFieldPrimitives primitive, float duration)
+    {
+        Create(position, orientation, primitive, duration);
+    }
+
+    private void Create(Vector3 position, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
         origin = position;
         rotation = orientation;

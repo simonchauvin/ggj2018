@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour {
 
     public Flock flock;
+    public AudioSpectrum audioSpectrum;
+
     private int[] leadersArray;
     private int[] gridsArray;
 
@@ -28,16 +30,66 @@ public class PlayerManager : MonoBehaviour {
         leadersArray = flock.getLeadersArray();
         gridsArray = flock.getGridsArray();
 
-        audioManip[0] = new AudioManipulation(aSource[0]);
+        currentAudio = -1;
+
+        /*for (int i = 0; i < aSource.Length; i++) {
+            audioManip[i] = new AudioManipulation(aSource[i], 22000f, 10f, 0f);
+            audioManip[i].initializeIt();
+        }*/
+
+        audioManip[0] = new AudioManipulation(aSource[0], 22000f, 10f, 0f);
         audioManip[0].initializeIt();
 
-        currentAudio = 0;
+        audioManip[1] = new AudioManipulation(aSource[1], 5000f, 1000f, 0f);
+        audioManip[1].initializeIt();
+
         //aSource[0].GetComponent<AudioLowPassFilter>().enabled = true;
+    }
+
+    void stopSound(AudioManipulation AM) {
+        IEnumerator fadeSound1 = AudioFadeOut.FadeOut(AM, 1f);
+        audioManip[currentAudio].inFadeOut = true;
+        audioManip[currentAudio].fadeSound = fadeSound1;
+        StartCoroutine(fadeSound1);
+    }
+
+    void startSound(AudioManipulation AM) {
+        if (AM.inFadeOut) {
+            StopCoroutine(AM.fadeSound);
+            AM.inFadeOut = false;
+            /*AM.startVolume */
+        }
+        AM.startSound();
     }
 
     // Update is called once per frame
     void Update () {
         /*TODO change for Input action to allow for remapping*/
+
+        if (Input.GetKeyDown("c")) {
+            if (currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+            }
+            currentAudio = 0 ;
+            startSound(audioManip[currentAudio]);
+        }
+
+        if (Input.GetKeyDown("v")) {
+            if(currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+            }
+            currentAudio = 1;
+            startSound(audioManip[currentAudio]);
+        }
+
+        if(currentAudio == -1) {
+            return;
+        }
+        /*
+        if (Input.GetKeyDown("b")) {
+
+        }*/
+
         if (Input.GetKey("a")) {
             audioManip[currentAudio].lowPassUp();
         }
@@ -78,10 +130,10 @@ public class PlayerManager : MonoBehaviour {
             audioManip[currentAudio].distortionDown();
         }
 
-        audioManip[currentAudio].updateAutoChange();
+        //audioManip[currentAudio].updateAutoChange();
 
         foreach (char c in Input.inputString) {
-            Debug.Log(c.ToString());
+            //Debug.Log(c.ToString());
         }
     }
 

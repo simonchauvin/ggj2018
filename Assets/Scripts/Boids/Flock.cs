@@ -11,24 +11,26 @@ public class Flock : MonoBehaviour
     public float cohesionWeight;
     public float separationWeight;
 
-    public Boid leader { get; private set; }
+    private Boid leader;
     private NavfieldManager navfieldManager;
 
     private Boid[] boids;
 
 
-    void Start()
+    void Awake()
     {
         navfieldManager = GameObject.FindObjectOfType<NavfieldManager>();
 
         boids = new Boid[numberOfBoids];
-
-        for (int i = 0; i < numberOfBoids; i++)
+        boids[0] = GetComponentInChildren<Boid>();
+        boids[0].init();
+        leader = boids[0];
+        for (int i = 1; i < numberOfBoids; i++)
         {
             boids[i] = Instantiate(boidPrefab, transform.position, Quaternion.identity) as Boid;
             boids[i].transform.parent = transform;
+            boids[i].init();
         }
-        leader = boids[Random.Range(0, boids.Length)];
     }
 
 
@@ -39,18 +41,19 @@ public class Flock : MonoBehaviour
             Boid boid = boids[i];
             if (boid != null && boid.thisRigidbody != null)
             {
-                //Vector3 follow = follow(boid) * followWeight * Time.deltaTime;
+                Vector3 following = follow(boid) * followWeight * Time.deltaTime;
                 Vector3 alignment = align(boid) * alignmentWeight * Time.deltaTime;
                 Vector3 cohesion = cohere(boid) * cohesionWeight * Time.deltaTime;
                 Vector3 separation = separate(boid) * separationWeight * Time.deltaTime;
                 if (GameManager.instance.debugBoids)
                 {
+                    boid.showFollowingDebug(following);
                     boid.showAlignmentDebug(alignment);
                     boid.showCohesionDebug(cohesion);
                     boid.showSeparationDebug(separation);
                 }
 
-                boid.thisRigidbody.velocity += (alignment + cohesion + separation);
+                boid.thisRigidbody.velocity += (following + alignment + cohesion + separation);
                 //boid.thisRigidbody.AddForce(align(boid) * alignmentWeight);
                 //boid.thisRigidbody.AddForce(cohere(boid) * cohesionWeight);
                 //boid.thisRigidbody.AddForce(separate(boid) * separationWeight);
@@ -67,25 +70,7 @@ public class Flock : MonoBehaviour
 
     private Vector3 follow(Boid boid)
     {
-        Vector3 velocity = Vector3.zero;
-        int count = 0;
-        for (int i = 0; i < numberOfBoids; i++)
-        {
-            float distance = Vector3.Distance(boids[i].transform.localPosition, boid.transform.localPosition);
-            if (distance > 0 && distance < boid.neighborRadius)
-            {
-                velocity += boids[i].thisRigidbody.velocity;
-                count++;
-            }
-        }
-        if (count > 0)
-        {
-            return (velocity / (numberOfBoids - 1)).normalized;
-        }
-        else
-        {
-            return Vector3.zero;
-        }
+        return leader.thisRigidbody.velocity;
     }
 
     private Vector3 align(Boid boid)
