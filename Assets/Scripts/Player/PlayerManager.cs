@@ -32,11 +32,17 @@ public class PlayerManager : MonoBehaviour {
 
         currentAudio = -1;
 
-        for (int i = 0; i < aSource.Length; i++) {
-            audioManip[i] = new AudioManipulation(aSource[i]);
+        /*for (int i = 0; i < aSource.Length; i++) {
+            audioManip[i] = new AudioManipulation(aSource[i], 22000f, 10f, 0f);
             audioManip[i].initializeIt();
-        }
-        
+        }*/
+
+        audioManip[0] = new AudioManipulation(aSource[0], 22000f, 10f, 0f);
+        audioManip[0].initializeIt();
+
+        audioManip[1] = new AudioManipulation(aSource[1], 5000f, 1000f, 0f);
+        audioManip[1].initializeIt();
+
         //aSource[0].GetComponent<AudioLowPassFilter>().enabled = true;
     }
 
@@ -127,7 +133,7 @@ public class PlayerManager : MonoBehaviour {
         //audioManip[currentAudio].updateAutoChange();
 
         foreach (char c in Input.inputString) {
-            Debug.Log(c.ToString());
+            //Debug.Log(c.ToString());
         }
     }
 

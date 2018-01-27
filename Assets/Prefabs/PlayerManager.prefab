@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4680068298181092}
   - component: {fileID: 114216884432851496}
+  - component: {fileID: 114926027408990280}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -52,3 +53,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flock: {fileID: 114483471949879406, guid: ca3b77109f02c7d419f23f43dc10bf04, type: 2}
+  audioSpectrum: {fileID: 0}
+  aSource:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &114926027408990280
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1968531527802478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf383a14878de245aac069bd997d3eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfSamples: 1024
+  bandType: 3
+  fallSpeed: 0.08
+  sensibility: 8
