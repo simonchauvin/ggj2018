@@ -137,6 +137,6 @@ public class Flock : MonoBehaviour
     }
 
     public int[] getGridsArray() {
-        return new int[] {1,2,3,4,5};
+        return new int[] {2,3,4,5};
     }
 }
