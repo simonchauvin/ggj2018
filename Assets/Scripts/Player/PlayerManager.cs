@@ -7,11 +7,14 @@ public class PlayerManager : MonoBehaviour {
     public Flock flock;
     private int[] leadersArray;
     private int[] gridsArray;
-    private int version = 1;
 
+    private int currentAudio = -1;
+
+    public AudioSource[] aSource = new AudioSource[5];
+    public AudioManipulation[] audioManip = new AudioManipulation[5];
     //int[] codeKeys = new int[37];
 
-    struct BirdCommand
+        struct BirdCommand
     {
         public int[] idLeaders;
         public int[] idGrids;
@@ -24,71 +27,59 @@ public class PlayerManager : MonoBehaviour {
     void Start () {
         leadersArray = flock.getLeadersArray();
         gridsArray = flock.getGridsArray();
-        //createBinding();
-    }
-	/*
-    void createBinding() {
-        switch (version) {
-            case 1:
-                codeKeysCreationVersion1();
-                commandCreationVersion1();
-                createBindingVersion1();
-            break;
-        }
+
+        audioManip[0] = new AudioManipulation(aSource[0]);
+        audioManip[0].initializeIt();
+
+        currentAudio = 0;
+        //aSource[0].GetComponent<AudioLowPassFilter>().enabled = true;
     }
 
-    void codeKeysCreationVersion1() {
-        int c = 0;
-        //min letter first
-        for(int i = 97; i <= 122; i++) {
-            codeKeys[c] = i;
-            c++;
-        }
-
-        //number then
-        for (int i = 48; i <= 57; i++) {
-            codeKeys[c] = i;
-            c++;
-        }
-    }
-
-    void commandCreationVersion1() {
-        int c = 0;
-        foreach (var leader in leadersArray) {
-            foreach (var grid in gridsArray) {
-                BirdsCommands[c].idLeaders = new int[] { leader };
-                BirdsCommands[c].idGrids = new int[] { grid };
-                c++;
-            }
-        }
-
-        foreach (var leader in leadersArray) {
-            foreach (var leader2 in leadersArray) {
-                if (leader != leader2) {
-                    foreach (var grid in gridsArray) {
-                        BirdsCommands[c].idLeaders = new int[] { leader, leader2 };
-                        BirdsCommands[c].idGrids = new int[] { grid };
-                        c++;
-                    }
-                }
-            }
-        }
-    }
-
-    void createBindingVersion1() {
-        int i = 0;
-        foreach(BirdCommand bc in BirdsCommands) {
-            binding.Add((char)codeKeys[i], bc);
-            i++;
-            if (i >= codeKeys.Length) {
-                break;
-            }
-        }
-    }
-    */
     // Update is called once per frame
     void Update () {
-        
+        /*TODO change for Input action to allow for remapping*/
+        if (Input.GetKey("a")) {
+            audioManip[currentAudio].lowPassUp();
+        }
+
+        if (Input.GetKey("q")) {
+            audioManip[currentAudio].lowPassDown();
+        }
+
+        if (Input.GetKey("z")) {
+            audioManip[currentAudio].highPassUp();
+        }
+
+        if (Input.GetKey("s")) {
+            audioManip[currentAudio].highPassDown();
+        }
+
+        if (Input.GetKey("e")) {
+            audioManip[currentAudio].passUp();
+        }
+
+        if (Input.GetKey("d")) {
+            audioManip[currentAudio].passDown();
+        }
+
+        if (Input.GetKey("r")) {
+            audioManip[currentAudio].passWidden();
+        }
+
+        if (Input.GetKey("f")) {
+            audioManip[currentAudio].passTighten();
+        }
+
+        if (Input.GetKey("t")) {
+            audioManip[currentAudio].distortionUp();
+        }
+
+        if (Input.GetKey("g")) {
+            audioManip[currentAudio].distortionDown();
+        }
+
+        audioManip[currentAudio].updateAutoChange();
+
         foreach (char c in Input.inputString) {
             Debug.Log(c.ToString());
         }
