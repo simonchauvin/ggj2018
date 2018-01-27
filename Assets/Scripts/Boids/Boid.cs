@@ -5,6 +5,7 @@ using UnityEngine;
 public class Boid : MonoBehaviour
 {
     #region Parameters
+    public bool leader;
     public float neighborRadius;
     public float desiredSeparation;
     #endregion
@@ -40,6 +41,13 @@ public class Boid : MonoBehaviour
         separationArea.gameObject.SetActive(false);
     }
 
+    public void init()
+    {
+        if (GameManager.instance.debugNavfields && leader)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.cyan;
+        }
+    }
 
     void Update()
     {
@@ -87,6 +95,11 @@ public class Boid : MonoBehaviour
     public void applyNavfieldBehavior(Navfield navfield)
     {
         thisRigidbody.velocity += navfield.getForce(transform.position) * Time.deltaTime;
+    }
+
+    public void showFollowingDebug(Vector3 velocity)
+    {
+        Debug.DrawRay(transform.localPosition, velocity, Color.yellow);
     }
 
     public void showAlignmentDebug(Vector3 velocity)
