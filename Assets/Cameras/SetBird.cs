@@ -16,10 +16,10 @@ public class SetBird : MonoBehaviour {
 	void Update () {
         if(Leader == null)
         {
-            FlockSystem.GetComponent<Flock>().getLeader();
+            Leader = FlockSystem.GetComponent<Flock>().getLeader().transform;
         }
         else
-            ObjectTrackedByCamera.position = Leader.position;
+            ObjectTrackedByCamera.position = Vector3.Lerp(ObjectTrackedByCamera.position,Leader.position,0.5f);
 
     }
 }
