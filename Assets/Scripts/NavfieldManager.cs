@@ -10,7 +10,7 @@ public class NavfieldManager : MonoBehaviour
     private void Awake()
     {
         navfields = new List<Navfield>();
-        navfields.Add(new Navfield(Vector3.zero, Quaternion.identity, NavFieldPrimitives.gathering, 50f));
+        //navfields.Add(new Navfield(Vector3.zero, Quaternion.identity, NavFieldPrimitives.gathering, 50f));
     }
 
     private void Start()
