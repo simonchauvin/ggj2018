@@ -123,11 +123,13 @@ public class PlayerManager : MonoBehaviour {
         }
 
         if (Input.GetKey("t")) {
-            audioManip[currentAudio].distortionUp();
+            //audioManip[currentAudio].distortionUp();
+            audioManip[currentAudio].updateAutoChange1();
         }
 
         if (Input.GetKey("g")) {
-            audioManip[currentAudio].distortionDown();
+            //audioManip[currentAudio].distortionDown();
+            audioManip[currentAudio].updateAutoChange2();
         }
 
         //audioManip[currentAudio].updateAutoChange();

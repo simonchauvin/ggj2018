@@ -13,7 +13,7 @@ public class AudioManipulation
 
     public IEnumerator fadeSound;
 
-    float ecartMin = 100f;
+    float ecartMin = 500f;
 
     public float startVolume = 1f;
     public bool inFadeOut = false;
@@ -85,10 +85,6 @@ public class AudioManipulation
         if (highPass.cutoffFrequency < 10f) {
             highPass.cutoffFrequency = 10f;
         }
-        /*
-        if (highPass.cutoffFrequency > lowPass.cutoffFrequency) {
-            highPass.cutoffFrequency = lowPass.cutoffFrequency - ecartMin;
-        }*/
     }
 
     public void lowPassUp() {
@@ -96,16 +92,12 @@ public class AudioManipulation
         if (lowPass.cutoffFrequency > 22000f) {
             lowPass.cutoffFrequency = 22000f;
         }
-        /*
-        if (lowPass.cutoffFrequency < highPass.cutoffFrequency) {
-            lowPass.cutoffFrequency = highPass.cutoffFrequency + ecartMin;
-        }*/
     }
 
     public void lowPassDown() {
         lowPass.cutoffFrequency -= stepFunc(lowPass.cutoffFrequency);
         if (lowPass.cutoffFrequency < 10f) {
-            lowPass.cutoffFrequency = 10f;
+            lowPass.cutoffFrequency = 10f + ecartMin;
         }
         if (lowPass.cutoffFrequency < highPass.cutoffFrequency) {
             lowPass.cutoffFrequency = highPass.cutoffFrequency + ecartMin;
@@ -115,7 +107,7 @@ public class AudioManipulation
     public void passUp() {
         float stepIt = stepFunc(highPass.cutoffFrequency);
         if (lowPass.cutoffFrequency + stepIt > 22000f){
-            highPass.cutoffFrequency += (22000f - lowPass.cutoffFrequency - ecartMin);
+            highPass.cutoffFrequency += Mathf.Max((22000f - lowPass.cutoffFrequency - ecartMin),0f);
             lowPass.cutoffFrequency = 22000f;
         } else { 
             highPass.cutoffFrequency += stepIt;
@@ -126,7 +118,7 @@ public class AudioManipulation
     public void passDown() {
         float stepIt = stepFunc(highPass.cutoffFrequency);
         if (highPass.cutoffFrequency - stepIt < 10f) {
-            lowPass.cutoffFrequency -= (lowPass.cutoffFrequency-10f-ecartMin);
+            lowPass.cutoffFrequency -= Mathf.Max(highPass.cutoffFrequency-10f-ecartMin,0f);
             highPass.cutoffFrequency = 10f;
         } else {
             highPass.cutoffFrequency -= stepIt;
@@ -137,8 +129,14 @@ public class AudioManipulation
     public void passWidden() {
         if (highPass.cutoffFrequency - stepFunc(highPass.cutoffFrequency) < 10f){
             lowPass.cutoffFrequency += stepFunc(highPass.cutoffFrequency)*2f;
+            if (lowPass.cutoffFrequency >= 22000f) {
+                lowPass.cutoffFrequency = 22000f;
+            }
         } else if(lowPass.cutoffFrequency + stepFunc(lowPass.cutoffFrequency) > 22000f) {
             highPass.cutoffFrequency -= stepFunc(highPass.cutoffFrequency)*2f;
+            if(highPass.cutoffFrequency <= 10f) {
+                highPass.cutoffFrequency = 10f;
+            }
         } else {
             highPass.cutoffFrequency -= stepFunc(highPass.cutoffFrequency);
             lowPass.cutoffFrequency += stepFunc(lowPass.cutoffFrequency);
@@ -153,7 +151,7 @@ public class AudioManipulation
             lowPass.cutoffFrequency -= stepFunc(lowPass.cutoffFrequency);
         }
     }
-
+    
     public void distortionUp() {
         if(distortion.distortionLevel <= 0.98f) { 
             distortion.distortionLevel += 0.2f * Time.deltaTime;
@@ -165,35 +163,30 @@ public class AudioManipulation
             distortion.distortionLevel -= 0.2f * Time.deltaTime;
         }
     }
-    /*
-    public void updateAutoChange() {
-        switch (autoUpdateV) {
-            case 1:
-                amplitude = 0.2f;
-                ppStep = 1000f;
-                float pingpong = Mathf.PingPong(Time.time, amplitude);
-                if (highPass.cutoffFrequency + (pingpong - amplitude / 2f) * ppStep < 10f
-                    || lowPass.cutoffFrequency + (pingpong - amplitude / 2f) * ppStep > 22000f) {
-                } else {
-                    highPass.cutoffFrequency += (pingpong - amplitude / 2f) * ppStep;
-                    lowPass.cutoffFrequency += (pingpong - amplitude / 2f) * ppStep;
-                }
-             break;
 
-            case 2:
-                amplitude = 2f;
-                ppStep = 500;
-                float pingpong2 = Mathf.PingPong(Time.time, amplitude);
-                if (highPass.cutoffFrequency + (pingpong2 - amplitude / 2f) * ppStep < 10f
-                    || lowPass.cutoffFrequency + (pingpong2 - amplitude / 2f) * ppStep > 22000f) {
-                } else {
-                    highPass.cutoffFrequency += (pingpong2 - amplitude / 2f) * ppStep;
-                    lowPass.cutoffFrequency += (pingpong2 - amplitude / 2f) * ppStep;
-                }
-                break;
+    public void updateAutoChange1() {
+        amplitude = 0.2f;
+        ppStep = 1000f;
+        float pingpong = Mathf.PingPong(Time.time, amplitude);
+        if (highPass.cutoffFrequency + (pingpong - amplitude / 2f) * ppStep < 10f
+            || lowPass.cutoffFrequency + (pingpong - amplitude / 2f) * ppStep > 22000f) {
+        } else {
+            highPass.cutoffFrequency += (pingpong - amplitude / 2f) * ppStep;
+            lowPass.cutoffFrequency += (pingpong - amplitude / 2f) * ppStep;
         }
-     
-    }*/
+    }
+
+    public void updateAutoChange2() {
+        amplitude = 2f;
+        ppStep = 500;
+        float pingpong2 = Mathf.PingPong(Time.time, amplitude);
+        if (highPass.cutoffFrequency + (pingpong2 - amplitude / 2f) * ppStep < 10f
+            || lowPass.cutoffFrequency + (pingpong2 - amplitude / 2f) * ppStep > 22000f) {
+        } else {
+            highPass.cutoffFrequency += (pingpong2 - amplitude / 2f) * ppStep;
+            lowPass.cutoffFrequency += (pingpong2 - amplitude / 2f) * ppStep;
+        }
+    }
 }
 
 public static class AudioFadeOut
