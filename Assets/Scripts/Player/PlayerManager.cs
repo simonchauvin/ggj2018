@@ -40,7 +40,7 @@ public class PlayerManager : MonoBehaviour {
             audioManip[i].initializeIt();
         }*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 22000f, 10f, 0f, 0f,1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 15000, 10f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
         audioManip[1] = new AudioManipulation(masterMix, aSource[1], 6000f, 1200f, 5f, 5f, 1.5f);
@@ -85,7 +85,14 @@ public class PlayerManager : MonoBehaviour {
             startSound(audioManip[currentAudio]);
         }
 
-        if(currentAudio == -1) {
+        if (Input.GetKeyUp("c") || Input.GetKeyUp("v")) {
+            if (currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+            }
+            currentAudio = -1;
+        }
+
+        if (currentAudio == -1) {
             return;
         }
 
