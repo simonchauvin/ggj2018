@@ -256,12 +256,16 @@ public class AudioManipulation
         float currentValueL;
         masterMix.GetFloat("highpassCutoff", out currentValueH);
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
+        if (currentValueH <= 50f && currentValueL >= 16000f) {
+            masterMix.SetFloat("volume", 0f);
+            return;
+        }
         float total = currentValueH + currentValueL;
         float currentVolume;
         masterMix.GetFloat("volume", out currentVolume);
         //Debug.Log("currentVol " + currentVolume);
         float t = Mathf.InverseLerp(freqMin, freqMax*2f, total) ;
-        float newVolume = Mathf.Lerp(-10, 30, t);
+        float newVolume = Mathf.Lerp(-10, 20, t);
 
         masterMix.SetFloat("volume", Mathf.Min(Mathf.Max(newVolume,-5f),10f));
     }

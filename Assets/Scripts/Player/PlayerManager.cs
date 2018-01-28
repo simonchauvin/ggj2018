@@ -19,28 +19,29 @@ public class PlayerManager : MonoBehaviour {
     private AudioSource[] aSource;
     public AudioManipulation[] audioManip = new AudioManipulation[5];
 
-    private int nbSounds = 2 ;
+    private int nbSounds = 2;
 
     public AudioMixer masterMix;
 
-        struct BirdCommand
-    {
+    struct BirdCommand {
         public int[] idLeaders;
         public int[] idGrids;
     };
 
-    private Dictionary<char,BirdCommand> binding = new Dictionary<char, BirdCommand>();
+    private Dictionary<char, BirdCommand> binding = new Dictionary<char, BirdCommand>();
     private BirdCommand[] BirdsCommands = new BirdCommand[100];
 
 
     void Awake() {
-        
+
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         leadersArray = flock.getLeadersArray();
         gridsArray = flock.getGridsArray();
+
+        InvokeRepeating("spawnSoundLength", 5f, 1f);
 
         audioSpectrum = GetComponent<AudioSpectrum>();
         initializeCheckSound();
@@ -56,7 +57,7 @@ public class PlayerManager : MonoBehaviour {
         }*/
         /*attention on gère les inputs en prenant la longueur de ce tableau*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 8000f, 10f, 0f, 0f, 1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 22000f, 10f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
         audioManip[2] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
@@ -65,7 +66,7 @@ public class PlayerManager : MonoBehaviour {
         audioManip[3] = new AudioManipulation(masterMix, aSource[2], 500f, 10f, 0f, 0f, 1f);
         audioManip[3].initializeIt();
 
-        audioManip[1] = new AudioManipulation(masterMix, aSource[3], 4000f, 10f, 0f, 0f, 1f);
+        audioManip[1] = new AudioManipulation(masterMix, aSource[3], 22000f, 10f, 0f, 0f, 1f);
         audioManip[1].initializeIt();
 
         nbSounds = 4;
@@ -89,7 +90,7 @@ public class PlayerManager : MonoBehaviour {
 
     public float[] GetSpectrumData() {
         float[] rawSpectrum = new float[audioSpectrum.numberOfSamples];
-        if (currentAudio != -1) { 
+        if (currentAudio != -1) {
             audioManip[currentAudio].audioSource.GetSpectrumData(rawSpectrum, 0, FFTWindow.BlackmanHarris);
         }
         return rawSpectrum;
@@ -97,7 +98,7 @@ public class PlayerManager : MonoBehaviour {
     /*AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);*/
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
         /*TODO change for Input action to allow for remapping*/
         /*
          
@@ -106,14 +107,15 @@ public class PlayerManager : MonoBehaviour {
             if (currentAudio != -1) {
                 stopSound(audioManip[currentAudio]);
                 currentAudio = -1;
+                spawnGrid(1);
             }
         }
 
-        for (int ci = 0; ci<nbSounds ; ci++) {
-            if (Input.GetButtonDown("sound"+(ci+1))) {
+        for (int ci = 0; ci < nbSounds; ci++) {
+            if (Input.GetButtonDown("sound" + (ci + 1))) {
                 if (currentAudio == ci) {
-                    stopSound(audioManip[currentAudio]);
-                    currentAudio = -1;
+                    //stopSound(audioManip[currentAudio]);
+                    //currentAudio = -1;
                 } else if (currentAudio != -1) {
                     stopSound(audioManip[currentAudio]);
                     currentAudio = ci;
@@ -121,6 +123,7 @@ public class PlayerManager : MonoBehaviour {
                 } else {
                     currentAudio = ci;
                     startSound(audioManip[currentAudio]);
+                    spawnGrid(2);
                 }
             }
         }
@@ -155,49 +158,117 @@ public class PlayerManager : MonoBehaviour {
 
         if (Input.GetButton("passwidden")) {
             audioManip[currentAudio].passWidden();
+            spawnSoundGrid(1);
         }
 
         if (Input.GetButton("passtighten")) {
             audioManip[currentAudio].passTighten();
+            spawnSoundGrid(2);
         }
 
         if (Input.GetButton("tremblepass1")) {
             audioManip[currentAudio].tremble1();
+            spawnSoundGrid(1);
         }
 
         if (Input.GetButton("tremblepass2")) {
             audioManip[currentAudio].tremble2();
+            spawnSoundGrid(1);
         }
 
         if (Input.GetButton("pitchup")) {
             audioManip[currentAudio].pitchUp();
+            spawnSoundGrid(1);
         }
 
         if (Input.GetButton("pitchdown")) {
             audioManip[currentAudio].pitchDown();
+            spawnSoundGrid(1);
         }
 
         if (Input.GetButton("pitchtremble1")) {
             audioManip[currentAudio].trembleP1();
+            spawnGrid(1);
+            spawnGrid(2);
+            spawnGrid(3);
+            spawnGrid(4);
         }
 
         if (Input.GetButton("pitchtremble2")) {
             audioManip[currentAudio].trembleP2();
+            spawnGrid(1);
+            spawnGrid(2);
+            spawnGrid(3);
+            spawnGrid(4);
         }
 
         audioManip[currentAudio].updateVolume();
 
-        checkSound();
+        //checkSound();
 
         foreach (char c in Input.inputString) {
+            //spawnSoundGrid(c);
             //Debug.Log(c.ToString());
         }
     }
 
-    void spawnGrid() {
-        Vector3 bary = flock.getBarycenter();
-        flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal, 3.0f);
-        /*NavFieldPrimitives.gathering*/
+    void spawnSoundLength() {
+        if (currentAudio == -1) return;
+
+        float currentValueH;
+        float currentValueL;
+        masterMix.GetFloat("highpassCutoff", out currentValueH);
+        masterMix.GetFloat("lowpassCutoff", out currentValueL);
+
+        if(currentValueL - currentValueH < 1200f) {
+            spawnGrid(2);
+        /*} else if(currentValueH + currentValueL < 3000f) {
+            spawnGrid(3);
+        } else if (currentValueH + currentValueL > 5000f) {
+            spawnGrid(4);
+        } else if (currentValueL - currentValueH > 2000f) {
+            spawnGrid(1);*/
+        }
+    }
+
+    float lastInputGrid = 0f;
+
+    void spawnSoundGrid(int inputType) {
+        if (currentAudio == -1) return;
+
+        if (lastInputGrid <= Time.time) { 
+            if (inputType == 1) {
+                spawnGrid(4);
+            } else if (inputType == 2) {
+                spawnGrid(2);
+            } else {
+                spawnGrid(3);
+            }
+            lastInputGrid = Time.time + 0.5f;
+        }
+    }
+
+    void spawnGrid(int version) {
+        if (currentAudio == -1) return;
+
+        switch (version) {
+            case 1:
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal, 3.0f);
+                Debug.Log("dispersal");
+                break;
+            case 2:
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.gathering, 3.0f);
+                Debug.Log("gathering");
+                break;
+            case 3: /*descendre*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.descent, 3.0f);
+                Debug.Log("descendre");
+                break;
+            case 4: /*monter*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.ascension, 3.0f);
+                Debug.Log("monter");
+                break;
+        }
     }
 
     private float rmsValue;
@@ -246,7 +317,7 @@ public class PlayerManager : MonoBehaviour {
         cumulatePitchVelocity = Mathf.Max(cumulatePitchVelocity, cumulatePitchVelocity-(cumulatePitchVelocity / 200f)*Time.deltaTime);
         cumulatePitchVelocity += velocityPitch*Time.deltaTime;
         previousPitch = pitchValue ;
-        Debug.Log(cumulatePitchVelocity);
+        //Debug.Log(cumulatePitchVelocity);
 
         /*Debug.Log("levels : "+levels);
         Debug.Log("peaks : " + peaks);
