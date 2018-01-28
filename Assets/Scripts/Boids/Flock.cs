@@ -70,13 +70,17 @@ public class Flock : MonoBehaviour
                 }
 
                 //Guigui Fix
-                float peurDuSol = Mathf.Pow(8.0f - Mathf.Clamp(boid.transform.position.y, 0.0f, 8.0f), 4.0f);
+                float peurDuSol = Mathf.Pow(8.0f - Mathf.Clamp(boid.transform.position.y, 0.0f, 8.0f), 2.0f);
                 
                 float vely = boid.thisRigidbody.velocity.y + Time.fixedDeltaTime*peurDuSol * Mathf.Abs(Mathf.Min(0,boid.thisRigidbody.velocity.y));
-                if (peurDuSol > 0 && vely < 1.0f)
-                    vely += 10.0f * Time.fixedDeltaTime;
+                if (peurDuSol > 0 && vely < 5.0f)
+                    vely += 15.0f * Time.fixedDeltaTime;
                 float speed = boid.thisRigidbody.velocity.magnitude;
                 boid.thisRigidbody.velocity = new Vector3(boid.thisRigidbody.velocity.x, vely, boid.thisRigidbody.velocity.z);
+
+                if (speed > 10.0f)
+                    speed = 10.0f;
+
                 boid.thisRigidbody.velocity = boid.thisRigidbody.velocity.normalized * speed;
             }
         }
