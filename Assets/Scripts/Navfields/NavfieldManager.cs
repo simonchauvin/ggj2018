@@ -36,7 +36,7 @@ public class NavfieldManager : MonoBehaviour
                 {
                     debugNavfields[i].gameObject.SetActive(true);
                 }
-
+                
                 navfields[i].updateRemaingTime(Time.deltaTime);
                 if (navfields[i].getRemainingTime() <= 0f)
                 {
@@ -56,6 +56,7 @@ public class NavfieldManager : MonoBehaviour
         if (GameManager.instance.debugNavfields)
         {
             debugNavfields.Add(Instantiate<Transform>(debugPrefab));
+            debugNavfields[debugNavfields.Count - 1].position = flock.getLeader().transform.position;
             debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(Navfield.SIZE, Navfield.SIZE, Navfield.SIZE);
         }
     }

@@ -20,6 +20,7 @@ public class Flock : MonoBehaviour
 
     public float debug1;
 
+
     void Awake()
     {
         navfieldManager = GameObject.FindObjectOfType<NavfieldManager>();
