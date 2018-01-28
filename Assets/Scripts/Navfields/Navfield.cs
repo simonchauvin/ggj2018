@@ -47,7 +47,7 @@ public class Navfield
                     {
                         for (int k = 0; k < Navfield.SIZE; k++)
                         {
-                            forces[i, j, k] = Navfield.FORCE * new Vector3(i - (Navfield.SIZE * 0.5f) / (Navfield.SIZE * 0.5f), j - (Navfield.SIZE * 0.5f) / (Navfield.SIZE * 0.5f), k - (Navfield.SIZE * 0.5f) / (Navfield.SIZE * 0.5f));
+                            forces[i, j, k] = Navfield.FORCE * new Vector3((i - (Navfield.SIZE * 0.5f)) / (Navfield.SIZE * 0.5f), (j - (Navfield.SIZE * 0.5f)) / (Navfield.SIZE * 0.5f), (k - (Navfield.SIZE * 0.5f)) / (Navfield.SIZE * 0.5f));
                         }
                     }
                 }
@@ -59,7 +59,7 @@ public class Navfield
                     {
                         for (int k = 0; k < Navfield.SIZE; k++)
                         {
-                            forces[i, j, k] = Navfield.FORCE * -new Vector3(i - (Navfield.SIZE * 0.5f) / (Navfield.SIZE * 0.5f), j - (Navfield.SIZE * 0.5f) / (Navfield.SIZE * 0.5f), k - (Navfield.SIZE * 0.5f) / (Navfield.SIZE * 0.5f));
+                            forces[i, j, k] = Navfield.FORCE * -new Vector3((i - (Navfield.SIZE * 0.5f)) / (Navfield.SIZE * 0.5f), (j - (Navfield.SIZE * 0.5f)) / (Navfield.SIZE * 0.5f), (k - (Navfield.SIZE * 0.5f)) / (Navfield.SIZE * 0.5f));
                         }
                     }
                 }
