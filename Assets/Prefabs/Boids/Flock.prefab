@@ -336,7 +336,7 @@ MonoBehaviour:
     type: 2}
   size: 16
   cellSize: 1
-  force: 1
+  force: 15
 --- !u!114 &114483471949879406
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -350,13 +350,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 114186838184786216, guid: 23dc8ceeca37a3848ae999af4827d674,
     type: 2}
-  numberOfBoids: 100
+  numberOfBoids: 250
   followWeight: 0
   alignmentWeight: 0.5
   cohesionWeight: 0.9
   separationWeight: 0.1
   minAnimSpeed: 0.75
   maxAnimSpeed: 1.25
+  minTimeBetweenRandomWalk: 5
+  maxTimeBetweenRandomWalk: 15
+  boundRadius: 40
   debug1: 0
 --- !u!114 &114759583380404708
 MonoBehaviour:

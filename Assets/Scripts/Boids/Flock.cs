@@ -20,6 +20,9 @@ public class Flock : MonoBehaviour
     private NavfieldManager navfieldManager;
 
     private Boid[] boids;
+    private Vector3 barycenter;
+
+
     private float randomWalkTime;
     private float returnTime;
     private float timeSinceLastRandomWalk;
@@ -66,6 +69,7 @@ public class Flock : MonoBehaviour
         }
 
         // Init
+        barycenter = Vector3.zero;
         timeSinceLastCheck = 0f;
         randomWalkTime = 0f;
         returnTime = 0f;
@@ -79,6 +83,7 @@ public class Flock : MonoBehaviour
     void FixedUpdate()
     {
         //int updateStart = (int)(Random.value * (boids.Length - numberOfBoids / 5 - 1));
+        barycenter = Vector3.zero;
         for (int i = 0; i < numberOfBoids; i++)
         {
             Boid boid = boids[i];
@@ -155,8 +160,11 @@ public class Flock : MonoBehaviour
                     speed = 10.0f;
 
                 boid.thisRigidbody.velocity = boid.thisRigidbody.velocity.normalized * speed;
+
+                barycenter += boid.transform.position;
             }
         }
+        barycenter = barycenter / numberOfBoids;
     }
 
     private void checkLeaderWalk()
@@ -297,5 +305,10 @@ public class Flock : MonoBehaviour
     public Boid getLeader ()
     {
         return leader;
+    }
+
+    public Vector3 getBarycenter ()
+    {
+        return barycenter;
     }
 }

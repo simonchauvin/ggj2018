@@ -15,12 +15,7 @@ public class Navfield
 
     public Navfield(NavfieldManager manager, Flock flock, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
-        Create(manager, flock.getLeader().transform.position, orientation, primitive, duration);
-    }
-
-    public Navfield(NavfieldManager manager, Boid leader, Quaternion orientation, NavFieldPrimitives primitive, float duration)
-    {
-        Create(manager, leader.transform.position, orientation, primitive, duration);
+        Create(manager, flock.getBarycenter(), orientation, primitive, duration);
     }
 
     public Navfield(NavfieldManager manager, Vector3 position, Quaternion orientation, NavFieldPrimitives primitive, float duration)

@@ -60,17 +60,7 @@ public class NavfieldManager : MonoBehaviour
         if (GameManager.instance.debugNavfields)
         {
             debugNavfields.Add(Instantiate<Transform>(debugPrefab));
-            debugNavfields[debugNavfields.Count - 1].position = flock.getLeader().transform.position;
-            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
-        }
-    }
-
-    public void addNavfield(Boid leader, Quaternion orientation, NavFieldPrimitives primitive, float duration)
-    {
-        navfields.Add(new Navfield(this, leader, orientation, primitive, duration));
-        if (GameManager.instance.debugNavfields)
-        {
-            debugNavfields.Add(Instantiate<Transform>(debugPrefab));
+            debugNavfields[debugNavfields.Count - 1].position = navfields[navfields.Count - 1].origin;
             debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
         }
     }
