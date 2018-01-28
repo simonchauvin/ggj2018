@@ -40,7 +40,7 @@ public class PlayerManager : MonoBehaviour {
             audioManip[i].initializeIt();
         }*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 22000f, 10f, 0f, 0f,1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 15000, 10f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
         audioManip[1] = new AudioManipulation(masterMix, aSource[1], 6000f, 1200f, 5f, 5f, 1.5f);
@@ -70,22 +70,34 @@ public class PlayerManager : MonoBehaviour {
         /*TODO change for Input action to allow for remapping*/
 
         if (Input.GetKeyDown("c")) {
-            if (currentAudio != -1) {
+            if(currentAudio == 0) {
                 stopSound(audioManip[currentAudio]);
+                currentAudio = -1;
+            }else if (currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+                currentAudio = 0;
+                startSound(audioManip[currentAudio]);
+            } else {
+                currentAudio = 0;
+                startSound(audioManip[currentAudio]);
             }
-            currentAudio = 0 ;
-            startSound(audioManip[currentAudio]);
         }
 
         if (Input.GetKeyDown("v")) {
-            if(currentAudio != -1) {
+            if (currentAudio == 1) {
                 stopSound(audioManip[currentAudio]);
+                currentAudio = -1;
+            } else if (currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+                currentAudio = 1;
+                startSound(audioManip[currentAudio]);
+            } else {
+                currentAudio = 1;
+                startSound(audioManip[currentAudio]);
             }
-            currentAudio = 1;
-            startSound(audioManip[currentAudio]);
         }
 
-        if(currentAudio == -1) {
+        if (currentAudio == -1) {
             return;
         }
 

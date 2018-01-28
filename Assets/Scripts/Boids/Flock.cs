@@ -57,6 +57,7 @@ public class Flock : MonoBehaviour
 
     void FixedUpdate()
     {
+        //int updateStart = (int)(Random.value * (boids.Length - numberOfBoids / 5 - 1));
         for (int i = 0; i < numberOfBoids; i++)
         {
             Boid boid = boids[i];
