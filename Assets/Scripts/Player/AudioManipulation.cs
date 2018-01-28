@@ -260,10 +260,10 @@ public class AudioManipulation
         float currentVolume;
         masterMix.GetFloat("volume", out currentVolume);
         Debug.Log("currentVol " + currentVolume);
-        float t = Mathf.InverseLerp(freqMin, freqMax, total) ;
-        float newVolume = Mathf.Lerp(-25, 30, t);
+        float t = Mathf.InverseLerp(freqMin, freqMax*2f, total) ;
+        float newVolume = Mathf.Lerp(-10, 30, t);
 
-        masterMix.SetFloat("volume", Mathf.Min(Mathf.Max(newVolume,0f),20f));
+        masterMix.SetFloat("volume", Mathf.Min(Mathf.Max(newVolume,-5f),20f));
     }
 }
 
