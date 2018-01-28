@@ -19,7 +19,7 @@ public class Flock : MonoBehaviour
     private Boid leader;
     private NavfieldManager navfieldManager;
 
-    private Boid[] boids;
+    public Boid[] boids { get; private set; }
     private Vector3 barycenter;
 
 

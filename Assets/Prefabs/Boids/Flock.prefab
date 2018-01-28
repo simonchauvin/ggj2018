@@ -334,8 +334,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugPrefab: {fileID: 4097172632325438, guid: 9521d5af32963a74a800b8fbea9f7ac6,
     type: 2}
-  size: 16
-  cellSize: 1
+  minSize: 32
+  minCellSize: 0.5
   force: 15
 --- !u!114 &114483471949879406
 MonoBehaviour:

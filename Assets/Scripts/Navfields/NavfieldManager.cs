@@ -5,9 +5,9 @@ using UnityEngine;
 public class NavfieldManager : MonoBehaviour
 {
     public Transform debugPrefab;
-    public int size;
-    public float cellSize;
-    public float force;
+    public int minSize = 32;
+    public float minCellSize = 0.5f;
+    public float force = 15f;
 
     private List<Navfield> navfields;
 
@@ -61,17 +61,7 @@ public class NavfieldManager : MonoBehaviour
         {
             debugNavfields.Add(Instantiate<Transform>(debugPrefab));
             debugNavfields[debugNavfields.Count - 1].position = navfields[navfields.Count - 1].origin;
-            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
-        }
-    }
-
-    public void addNavfield(Vector3 position, Quaternion orientation, NavFieldPrimitives primitive, float duration)
-    {
-        navfields.Add(new Navfield(this, position, orientation, primitive, duration));
-        if (GameManager.instance.debugNavfields)
-        {
-            debugNavfields.Add(Instantiate<Transform>(debugPrefab));
-            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
+            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(navfields[navfields.Count - 1].size * navfields[navfields.Count - 1].cellSize, navfields[navfields.Count - 1].size * navfields[navfields.Count - 1].cellSize, navfields[navfields.Count - 1].size * navfields[navfields.Count - 1].cellSize);
         }
     }
 
