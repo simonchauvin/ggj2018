@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviour {
         }*/
         /*attention on gère les inputs en prenant la longueur de ce tableau*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 4010f, 500f, 0f, 0f, 1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 22000f, 10f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
         audioManip[2] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
@@ -115,35 +115,6 @@ public class PlayerManager : MonoBehaviour {
                 }
             }
         }
-        /*
-        if (Input.GetButtonDown("sound1")) {
-            if(currentAudio == 0) {
-                stopSound(audioManip[currentAudio]);
-                currentAudio = -1;
-            }else if (currentAudio != -1) {
-                stopSound(audioManip[currentAudio]);
-                currentAudio = 0;
-                startSound(audioManip[currentAudio]);
-            } else {
-                currentAudio = 0;
-                startSound(audioManip[currentAudio]);
-            }
-        }
-
-        if (Input.GetButtonDown("sound2")) {
-            if (currentAudio == 1) {
-                stopSound(audioManip[currentAudio]);
-                currentAudio = -1;
-            } else if (currentAudio != -1) {
-                stopSound(audioManip[currentAudio]);
-                currentAudio = 1;
-                startSound(audioManip[currentAudio]);
-            } else {
-                currentAudio = 1;
-                startSound(audioManip[currentAudio]);
-            }
-        }
-        */
 
         if (currentAudio == -1) {
             return;
@@ -207,10 +178,28 @@ public class PlayerManager : MonoBehaviour {
 
         audioManip[currentAudio].updateVolume();
 
+        checkSound();
+
         foreach (char c in Input.inputString) {
             //Debug.Log(c.ToString());
         }
     }
+
+    void checkSound() {
+        string levels = "";
+        string peaks = "";
+        string means = "";
+        for (int i = 0; i < audioSpectrum.Levels.Length; i++) {
+            levels += audioSpectrum.Levels[i] + ", ";
+            peaks += audioSpectrum.PeakLevels[i] + ", ";
+            means += audioSpectrum.MeanLevels[i] + ", ";
+        }
+        /*Debug.Log("levels : "+levels);
+        Debug.Log("peaks : " + peaks);
+        Debug.Log("means : " + means);*/
+
+    }
+
     /*
     void sendBirdCommand(int[] idLeaders, int[] idGrids) {
         flock.transmissionListener(idLeaders, idGrids);

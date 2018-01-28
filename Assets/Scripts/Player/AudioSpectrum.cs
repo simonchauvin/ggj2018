@@ -98,8 +98,8 @@ public class AudioSpectrum : MonoBehaviour
     {
         CheckBuffers ();
 
-        /*AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);*/
-        rawSpectrum = PM.GetSpectrumData(); /*NK CHANGE*/
+        AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);
+        /*rawSpectrum = PM.GetSpectrumData(); /*NK CHANGE*/
 
         float[] middlefrequencies = middleFrequenciesForBands [(int)bandType];
         var bandwidth = bandwidthForBands [(int)bandType];

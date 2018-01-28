@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flock: {fileID: 114483471949879406, guid: ca3b77109f02c7d419f23f43dc10bf04, type: 2}
-  sounds: {fileID: 1325456853366692, guid: 60e74cddc636f45478495028cbdf8bfa, type: 2}
+  sounds: {fileID: 0}
   masterMix: {fileID: 24100000, guid: 89c8feb9c81cb824b925076a0479254d, type: 2}
 --- !u!114 &114926027408990280
 MonoBehaviour:
@@ -67,6 +67,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfSamples: 1024
-  bandType: 3
+  bandType: 2
   fallSpeed: 0.08
   sensibility: 8
