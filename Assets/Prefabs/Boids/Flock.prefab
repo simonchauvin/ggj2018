@@ -359,7 +359,7 @@ MonoBehaviour:
   maxAnimSpeed: 1.25
   minTimeBetweenRandomWalk: 5
   maxTimeBetweenRandomWalk: 15
-  boundRadius: 40
+  boundRadius: 100
   debug1: 0
 --- !u!114 &114759583380404708
 MonoBehaviour:
