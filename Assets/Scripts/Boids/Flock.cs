@@ -28,6 +28,7 @@ public class Flock : MonoBehaviour
         boids = new Boid[numberOfBoids];
         boids[0] = GetComponentInChildren<Boid>();
         boids[0].init();
+        boids[0].setNeighbors(new Boid[0]);
         leader = boids[0];
         for (int i = 1; i < numberOfBoids; i++)
         {
@@ -35,8 +36,24 @@ public class Flock : MonoBehaviour
             boids[i].transform.parent = transform;
             boids[i].init();
         }
+        // Set neighbors
+        int index = 0;
+        int neighborIndexLeft = numberOfBoids - 1;
+        Boid[] neighbors;
+        List<Boid> neighborsLeft = new List<Boid>(boids);
+        for (int i = 1; i < numberOfBoids; i++)
+        {
+            neighbors = new Boid[1];
+            for (int j = 0; j < 1; j++)
+            {
+                index = Random.Range(1, neighborIndexLeft);
+                neighbors[j] = neighborsLeft[index];
+                neighborsLeft.RemoveAt(index);
+                neighborIndexLeft--;
+            }
+            boids[i].setNeighbors(neighbors);
+        }
     }
-
 
     void FixedUpdate()
     {
@@ -45,6 +62,12 @@ public class Flock : MonoBehaviour
             Boid boid = boids[i];
             if (boid != null && boid.thisRigidbody != null)
             {
+                if (boid.leader)
+                {
+                    // behaviour random balade dans une sphere
+                    // random delacement vers 0,0,0
+                }
+
                 Vector3 following = follow(boid) * followWeight * Time.deltaTime;
                 Vector3 alignment = align(boid) * alignmentWeight * Time.deltaTime;
                 Vector3 cohesion = cohere(boid) * cohesionWeight * Time.deltaTime;
@@ -56,7 +79,7 @@ public class Flock : MonoBehaviour
                     boid.showCohesionDebug(cohesion);
                     boid.showSeparationDebug(separation);
                 }
-
+                
                 boid.thisRigidbody.velocity += (following + alignment + cohesion + separation);
                 //boid.thisRigidbody.AddForce(align(boid) * alignmentWeight);
                 //boid.thisRigidbody.AddForce(cohere(boid) * cohesionWeight);
@@ -95,18 +118,19 @@ public class Flock : MonoBehaviour
     {
         Vector3 velocity = Vector3.zero;
         int count = 0;
-        for (int i = 0; i < numberOfBoids; i++)
+        for (int i = 0; i < boid.neighbors.Length; i++)
         {
-            float distance = Vector3.Distance(boids[i].transform.localPosition, boid.transform.localPosition);
-            if (distance > 0 && distance < boid.neighborRadius)
-            {
+            //float distance = Vector3.Distance(boids[i].transform.localPosition, boid.transform.localPosition);
+            //if (distance > 0 && distance < boid.neighborRadius)
+            //{
                 velocity += boids[i].thisRigidbody.velocity;
                 count++;
-            }
+            //}
         }
         if (count > 0)
         {
-            return (velocity / (numberOfBoids - 1)).normalized;
+            //return (velocity / (boid.neighbors.Length - 1)).normalized;
+            return (velocity / (boid.neighbors.Length)).normalized;
         }
         else
         {
@@ -118,18 +142,19 @@ public class Flock : MonoBehaviour
     {
         Vector3 centerOfMass = Vector3.zero;
         int count = 0;
-        for (int i = 0; i < numberOfBoids; i++)
+        for (int i = 0; i < boid.neighbors.Length; i++)
         {
-            float distance = Vector3.Distance(boids[i].transform.localPosition, boid.transform.localPosition);
-            if (distance > 0 && distance < boid.neighborRadius)
-            {
+            //float distance = Vector3.Distance(boids[i].transform.localPosition, boid.transform.localPosition);
+            //if (distance > 0 && distance < boid.neighborRadius)
+            //{
                 centerOfMass += boids[i].transform.localPosition;
                 count++;
-            }
+            //}
         }
         if (count > 0)
         {
-            return ((centerOfMass / (numberOfBoids - 1)) - boid.transform.localPosition).normalized;
+            //return ((centerOfMass / (boid.neighbors.Length - 1)) - boid.transform.localPosition).normalized;
+            return ((centerOfMass / (boid.neighbors.Length)) - boid.transform.localPosition).normalized;
         }
         else
         {
@@ -141,18 +166,19 @@ public class Flock : MonoBehaviour
     {
         Vector3 velocity = Vector3.zero;
         int count = 0;
-        for (int i = 0; i < numberOfBoids; i++)
+        for (int i = 0; i < boid.neighbors.Length; i++)
         {
             float distance = Vector3.Distance(boids[i].transform.localPosition, boid.transform.localPosition);
-            if (distance > 0 && distance < boid.desiredSeparation)
-            {
+            //if (distance > 0 && distance < boid.desiredSeparation)
+            //{
                 velocity -= (boids[i].transform.localPosition - boid.transform.localPosition).normalized / distance;
                 count++;
-            }
+            //}
         }
         if (count > 0)
         {
-            return (velocity / (numberOfBoids - 1)).normalized;
+            //return (velocity / (boid.neighbors.Length - 1)).normalized;
+            return (velocity / (boid.neighbors.Length)).normalized;
         }
         else
         {

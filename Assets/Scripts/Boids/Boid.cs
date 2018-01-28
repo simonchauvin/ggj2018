@@ -17,6 +17,7 @@ public class Boid : MonoBehaviour
     #endregion
 
     private Flock flock;
+    public Boid[] neighbors { get; private set; }
 
 
     void Start()
@@ -47,6 +48,15 @@ public class Boid : MonoBehaviour
         if (GameManager.instance.debugNavfields && leader)
         {
             GetComponentInChildren<MeshRenderer>().material.color = Color.cyan;
+        }
+    }
+
+    public void setNeighbors(Boid[] neighbors)
+    {
+        this.neighbors = new Boid[neighbors.Length];
+        for (int i = 0; i < neighbors.Length; i++)
+        {
+            this.neighbors[i] = neighbors[i];
         }
     }
 
