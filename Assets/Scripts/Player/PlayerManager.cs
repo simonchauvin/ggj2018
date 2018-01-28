@@ -17,8 +17,6 @@ public class PlayerManager : MonoBehaviour {
     public AudioManipulation[] audioManip = new AudioManipulation[5];
 
     public AudioMixer masterMix;
-
-    public AudioMixerSnapshot[] mixSnaps = new AudioMixerSnapshot[5];
     //int[] codeKeys = new int[37];
 
         struct BirdCommand
@@ -42,10 +40,10 @@ public class PlayerManager : MonoBehaviour {
             audioManip[i].initializeIt();
         }*/
 
-        audioManip[0] = new AudioManipulation(masterMix, mixSnaps, aSource[0], 0);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 22000f, 10f, 0f, 0f,1f);
         audioManip[0].initializeIt();
 
-        audioManip[1] = new AudioManipulation(masterMix, mixSnaps, aSource[1], 1);
+        audioManip[1] = new AudioManipulation(masterMix, aSource[1], 6000f, 1200f, 5f, 5f, 1.5f);
         audioManip[1].initializeIt();
 
         //aSource[0].GetComponent<AudioLowPassFilter>().enabled = true;
@@ -90,10 +88,6 @@ public class PlayerManager : MonoBehaviour {
         if(currentAudio == -1) {
             return;
         }
-        /*
-        if (Input.GetKeyDown("b")) {
-
-        }*/
 
         if (Input.GetKey("a")) {
             audioManip[currentAudio].lowPassUp();

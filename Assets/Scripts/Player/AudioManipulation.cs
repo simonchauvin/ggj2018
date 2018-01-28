@@ -20,20 +20,16 @@ public class AudioManipulation
 
     public float startVolume = 1f;
     public bool inFadeOut = false;
-    /*
+    
+
     public float lowPassStart;
     public float highPassStart;
-    public float lowPassEcho;
-    public float highPassEcho;
-    public float distortionStart;
-    public int autoUpdateV = 0;
-    */
+    public float lowPassResonance;
+    public float highPassResonance;
+    public float pitch;
+
     public float amplitude;
     public float ppStep;
-
-    private int defaultSnap;
-
-    private AudioMixerSnapshot[] audioSnaps;
 
     /*
     public AudioManipulation(AudioSource pAudioSource) {
@@ -54,11 +50,14 @@ public class AudioManipulation
         highPassEcho = hpE;
     }
     */
-    public AudioManipulation(AudioMixer pMixer, AudioMixerSnapshot[] pAudioSnaps, AudioSource pAudioSource, int pDefaultSnap) {
+    public AudioManipulation(AudioMixer pMixer, AudioSource pAudioSource, float lp, float hp, float lpE, float hpE, float p) {
         masterMix = pMixer;
         audioSource = pAudioSource;
-        audioSnaps = pAudioSnaps;
-        defaultSnap = pDefaultSnap;
+        lowPassStart = lp;
+        highPassStart = hp;
+        highPassResonance = hpE;
+        lowPassResonance = lpE;
+        pitch = p;
     }
 
     public void initializeIt() {
@@ -67,20 +66,23 @@ public class AudioManipulation
         highPass = audioSource.gameObject.AddComponent<AudioHighPassFilter>();
         distortion = audioSource.gameObject.AddComponent<AudioDistortionFilter>();
         */
+        /*
+        masterMix.GetFloat("lowpassCutoff", out lowPassStart);
+        masterMix.GetFloat("highpassCutoff", out highPassStart);
+        masterMix.GetFloat("highpassResonance", out highPassResonance);
+        masterMix.GetFloat("lowpassResonance", out lowPassResonance);
+        masterMix.GetFloat("pitch", out pitch);
+        */
         initializeParams();
     }
 
     public void initializeParams() {
         audioSource.volume = startVolume;
-        masterMix.TransitionToSnapshots(new AudioMixerSnapshot[] {audioSnaps[defaultSnap]}, new float[]{1f}, 0f);
-        /*
-        lowPass.cutoffFrequency = lowPassStart;
-        highPass.cutoffFrequency = highPassStart;
-        distortion.distortionLevel = distortionStart;
-        highPass.highpassResonanceQ = highPassEcho;
-        lowPass.lowpassResonanceQ = lowPassEcho;
-        */
-        //masterMix.TransitionToSnapshots()
+        masterMix.SetFloat("lowpassCutoff", lowPassStart);
+        masterMix.SetFloat("highpassCutoff", highPassStart);
+        masterMix.SetFloat("highpassResonance", highPassResonance);
+        masterMix.SetFloat("lowpassResonance", lowPassResonance);
+        masterMix.SetFloat("pitch", pitch);
     }
 
     public void startSound() {
@@ -193,11 +195,11 @@ public class AudioManipulation
         float stepIt = stepFunc(currentValueH);
         if (currentValueH - stepIt < 10f) {
             changeParamPass("lowpassCutoff", -1, Mathf.Max(currentValueH - 10f - ecartMin, 0f));
-            changeParamPass("highassCutoff", -1, stepIt);
+            changeParamPass("highpassCutoff", -1, stepIt);
 
         } else {
             changeParamPass("lowpassCutoff", -1, stepIt);
-            changeParamPass("highassCutoff", -1, stepIt);
+            changeParamPass("highpassCutoff", -1, stepIt);
         }
     }
 
@@ -247,11 +249,11 @@ public class AudioManipulation
     }
     */
     public void pitchUp() {
-        changeParamPitch("pitch", 1, 10f*Time.deltaTime);
+        changeParamPitch("pitch", 1, 0.1f*Time.deltaTime);
     }
 
     public void pitchDown() {
-        changeParamPitch("pitch", -1, 10f*Time.deltaTime);
+        changeParamPitch("pitch", -1, 0.1f*Time.deltaTime);
     }
 
 
