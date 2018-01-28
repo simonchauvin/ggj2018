@@ -67,12 +67,12 @@ public class Boid : MonoBehaviour
         if (GameManager.instance.debugBoids)
         {
             neighborArea.gameObject.SetActive(true);
-            separationArea.gameObject.SetActive(true);
+            //separationArea.gameObject.SetActive(true);
         }
         else
         {
             neighborArea.gameObject.SetActive(false);
-            separationArea.gameObject.SetActive(false);
+            //separationArea.gameObject.SetActive(false);
         }
     }
 
