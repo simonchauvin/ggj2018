@@ -27,7 +27,7 @@ MonoBehaviour:
   fog:
     m_Enabled: 0
     m_Settings:
-      excludeSkybox: 1
+      excludeSkybox: 0
   antialiasing:
     m_Enabled: 0
     m_Settings:
@@ -85,25 +85,25 @@ MonoBehaviour:
   eyeAdaptation:
     m_Enabled: 0
     m_Settings:
-      lowPercent: 45
-      highPercent: 95
-      minLuminance: -5
-      maxLuminance: 1
+      lowPercent: 15.482759
+      highPercent: 72.241394
+      minLuminance: -6.17
+      maxLuminance: -2.34
       keyValue: 0.25
       dynamicKeyValue: 1
       adaptationType: 0
-      speedUp: 2
+      speedUp: 0.04
       speedDown: 1
-      logMin: -8
-      logMax: 4
+      logMin: -13
+      logMax: 9
   bloom:
     m_Enabled: 0
     m_Settings:
       bloom:
-        intensity: 0.5
+        intensity: 121.78
         threshold: 1.1
-        softKnee: 0.5
-        radius: 4
+        softKnee: 0.307
+        radius: 2.64
         antiFlicker: 0
       lensDirt:
         texture: {fileID: 0}
@@ -120,12 +120,12 @@ MonoBehaviour:
         neutralWhiteLevel: 5.3
         neutralWhiteClip: 10
       basic:
-        postExposure: 0
-        temperature: 11
-        tint: 6
-        hueShift: -2
-        saturation: 1.19
-        contrast: 1.28
+        postExposure: -0.1
+        temperature: 42
+        tint: 5
+        hueShift: 0
+        saturation: 1.11
+        contrast: 1
       channelMixer:
         red: {x: 1, y: 0, z: 0}
         green: {x: 0, y: 1, z: 0}
@@ -293,12 +293,12 @@ MonoBehaviour:
       size: 1
       luminanceContribution: 0.8
   vignette:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       mode: 0
       color: {r: 0, g: 0, b: 0, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.45
+      intensity: 0.283
       smoothness: 0.2
       roundness: 1
       mask: {fileID: 0}
