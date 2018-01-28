@@ -14,6 +14,7 @@ public class Navfield
     private float duration;
     private float time;
 
+
     public Navfield(Flock flock, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
         Create(flock.getLeader().transform.position, orientation, primitive, duration);
@@ -68,6 +69,7 @@ public class Navfield
 
     private int[] getIndices (Vector3 position)
     {
+        position -= origin;
         return new int[3]
         {
             Mathf.FloorToInt((position.x / Navfield.CELL_SIZE) + (Navfield.SIZE * 0.5f)),
