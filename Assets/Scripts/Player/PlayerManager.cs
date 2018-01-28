@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PlayerManager : MonoBehaviour {
 
     public Flock flock;
-    public AudioSpectrum audioSpectrum;
+    private AudioSpectrum audioSpectrum;
 
     private int[] leadersArray;
     private int[] gridsArray;
@@ -14,6 +15,10 @@ public class PlayerManager : MonoBehaviour {
 
     public AudioSource[] aSource = new AudioSource[5];
     public AudioManipulation[] audioManip = new AudioManipulation[5];
+
+    public AudioMixer masterMix;
+
+    public AudioMixerSnapshot[] mixSnaps = new AudioMixerSnapshot[5];
     //int[] codeKeys = new int[37];
 
         struct BirdCommand
@@ -37,10 +42,10 @@ public class PlayerManager : MonoBehaviour {
             audioManip[i].initializeIt();
         }*/
 
-        audioManip[0] = new AudioManipulation(aSource[0], 22000f, 10f, 0f);
+        audioManip[0] = new AudioManipulation(masterMix, mixSnaps, aSource[0], 0);
         audioManip[0].initializeIt();
 
-        audioManip[1] = new AudioManipulation(aSource[1], 5000f, 1000f, 0f);
+        audioManip[1] = new AudioManipulation(masterMix, mixSnaps, aSource[1], 1);
         audioManip[1].initializeIt();
 
         //aSource[0].GetComponent<AudioLowPassFilter>().enabled = true;
@@ -124,12 +129,22 @@ public class PlayerManager : MonoBehaviour {
 
         if (Input.GetKey("t")) {
             //audioManip[currentAudio].distortionUp();
-            audioManip[currentAudio].updateAutoChange1();
+            audioManip[currentAudio].tremble1();
         }
 
         if (Input.GetKey("g")) {
             //audioManip[currentAudio].distortionDown();
-            audioManip[currentAudio].updateAutoChange2();
+            audioManip[currentAudio].tremble2();
+        }
+
+        if (Input.GetKey("y")) {
+            //audioManip[currentAudio].distortionUp();
+            audioManip[currentAudio].pitchUp();
+        }
+
+        if (Input.GetKey("h")) {
+            //audioManip[currentAudio].distortionDown();
+            audioManip[currentAudio].pitchDown();
         }
 
         //audioManip[currentAudio].updateAutoChange();
