@@ -122,26 +122,30 @@ public class PlayerManager : MonoBehaviour {
         }
 
         if (Input.GetKey("t")) {
-            //audioManip[currentAudio].distortionUp();
             audioManip[currentAudio].tremble1();
         }
 
         if (Input.GetKey("g")) {
-            //audioManip[currentAudio].distortionDown();
             audioManip[currentAudio].tremble2();
         }
 
         if (Input.GetKey("y")) {
-            //audioManip[currentAudio].distortionUp();
             audioManip[currentAudio].pitchUp();
         }
 
         if (Input.GetKey("h")) {
-            //audioManip[currentAudio].distortionDown();
             audioManip[currentAudio].pitchDown();
         }
 
-        //audioManip[currentAudio].updateAutoChange();
+        if (Input.GetKey("u")) {
+            //audioManip[currentAudio].distortionDown();
+            audioManip[currentAudio].trembleP1();
+        }
+
+        if (Input.GetKey("j")) {
+            //audioManip[currentAudio].distortionDown();
+            audioManip[currentAudio].trembleP2();
+        }
 
         foreach (char c in Input.inputString) {
             //Debug.Log(c.ToString());

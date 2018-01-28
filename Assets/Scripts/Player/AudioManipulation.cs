@@ -20,7 +20,7 @@ public class AudioManipulation
 
     public float startVolume = 1f;
     public bool inFadeOut = false;
-    
+
 
     public float lowPassStart;
     public float highPassStart;
@@ -95,30 +95,33 @@ public class AudioManipulation
         masterMix.GetFloat(param, out currentValue);
         float newValue = currentValue + (sign * value);
 
-        if (newValue > 150f) {
-            newValue = 150f;
-        } else if (newValue < 50f) {
-            newValue = 50f;
+        if (newValue > 1.50f) {
+            newValue = 1.50f;
+        } else if (newValue < 0.50f) {
+            newValue = 0.50f;
         }
 
         masterMix.SetFloat(param, newValue);
     }
 
-    public void changeParamPass(string param, int sign, float value = 0f) {
+    public void changeParamPass(string param, int sign, float value) {
         float currentValue;
         masterMix.GetFloat(param, out currentValue);
-        Debug.Log(currentValue.ToString());
-        if (value == 0f) {
-            value = stepFunc(currentValue);
-        }
-       
-        float newValue = currentValue + (sign*value);
-        if(newValue > 22000f) {
+
+        float newValue = currentValue + (sign * value);
+        if (newValue > 22000f) {
             newValue = 22000f;
-        }else if(newValue < 10f) {
+        } else if (newValue < 10f) {
             newValue = 10f;
         }
         masterMix.SetFloat(param, newValue);
+    }
+
+    public void changeParamPass(string param, int sign) {
+        float currentValue;
+        masterMix.GetFloat(param, out currentValue);
+        float value = stepFunc(currentValue);
+        changeParamPass(param, sign, value);
     }
 
     public float stepFunc(float entry) {
@@ -178,7 +181,7 @@ public class AudioManipulation
         masterMix.GetFloat("highpassCutoff", out currentValueH);
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
         float stepIt = stepFunc(currentValueH);
-        if (currentValueL + stepIt > 22000f){
+        if (currentValueL + stepIt >= 22000f) {
             changeParamPass("highpassCutoff", 1, Mathf.Max((22000f - currentValueL - ecartMin), 0f));
             changeParamPass("lowpassCutoff", 1, stepIt);
         } else {
@@ -193,7 +196,7 @@ public class AudioManipulation
         masterMix.GetFloat("highpassCutoff", out currentValueH);
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
         float stepIt = stepFunc(currentValueH);
-        if (currentValueH - stepIt < 10f) {
+        if (currentValueH - stepIt <= 10f) {
             changeParamPass("lowpassCutoff", -1, Mathf.Max(currentValueH - 10f - ecartMin, 0f));
             changeParamPass("highpassCutoff", -1, stepIt);
 
@@ -210,9 +213,9 @@ public class AudioManipulation
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
         float stepItH = stepFunc(currentValueH);
         //float stepItL = stepFunc(currentValueL);
-        if (currentValueH - stepItH < 10f){
-            changeParamPass("lowpassCutoff", 1, stepItH*2f);
-        } else if(currentValueL + stepItH > 22000f) {
+        if (currentValueH - stepItH < 10f) {
+            changeParamPass("lowpassCutoff", 1, stepItH * 2f);
+        } else if (currentValueL + stepItH > 22000f) {
             changeParamPass("highpassCutoff", -1, stepItH * 2f);
         } else {
             changeParamPass("lowpassCutoff", 1, stepItH);
@@ -249,11 +252,11 @@ public class AudioManipulation
     }
     */
     public void pitchUp() {
-        changeParamPitch("pitch", 1, 0.1f*Time.deltaTime);
+        changeParamPitch("pitch", 1, 0.07f * Time.deltaTime);
     }
 
     public void pitchDown() {
-        changeParamPitch("pitch", -1, 0.1f*Time.deltaTime);
+        changeParamPitch("pitch", -1, 0.07f * Time.deltaTime);
     }
 
 
@@ -290,6 +293,39 @@ public class AudioManipulation
         } else {
             changeParamPass("lowpassCutoff", 1, (pingpong2 - amplitude / 2f) * ppStep);
             changeParamPass("highpassCutoff", 1, (pingpong2 - amplitude / 2f) * ppStep);
+        }
+    }
+
+    public void trembleP1() {
+        amplitude = 0.5f;
+        ppStep = 0.001f;
+        float pingpong3 = Mathf.PingPong(Time.time, amplitude);
+        float currentPitch;
+        masterMix.GetFloat("pitch", out currentPitch);
+
+        Debug.Log(pingpong3);
+        Debug.Log(currentPitch);
+
+        if (currentPitch + (pingpong3 - amplitude / 2f) * ppStep < 0.5f
+            || currentPitch + (pingpong3 - amplitude / 2f) * ppStep > 1.5f) {
+        } else {
+            changeParamPass("pitch", 1, (pingpong3 - amplitude / 2f) * ppStep);
+        }
+    }
+
+    public void trembleP2() {
+        return;
+        amplitude = 0.2f;
+        ppStep = 0.001f;
+        float pingpong4 = Mathf.PingPong(Time.time, amplitude);
+
+        float currentPitch;
+        masterMix.GetFloat("pitch", out currentPitch);
+
+        if (currentPitch + (pingpong4 - amplitude / 2f) * ppStep < 0.5f
+            || currentPitch + (pingpong4 - amplitude / 2f) * ppStep > 1.5f) {
+        } else {
+            changeParamPass("pitch", 1, (pingpong4 - amplitude / 2f) * ppStep);
         }
     }
 }

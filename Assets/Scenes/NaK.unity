@@ -378,12 +378,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 82402048759815182, guid: e55cfcecc3dda034b995aa18b0613b74,
-        type: 2}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: 24300002, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e55cfcecc3dda034b995aa18b0613b74, type: 2}
   m_IsPrefabParent: 0
@@ -478,12 +472,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 82340505784391136, guid: b6aeeca3b5b75dc44ab04231d63d0c33,
-        type: 2}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: 24300002, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b6aeeca3b5b75dc44ab04231d63d0c33, type: 2}
   m_IsPrefabParent: 0
@@ -494,11 +482,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114216884432851496, guid: e011c18d2d20e824baf7fcb18671a05a,
-        type: 2}
-      propertyPath: mixSnaps.Array.size
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 4680068298181092, guid: e011c18d2d20e824baf7fcb18671a05a, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -541,36 +524,6 @@ Prefab:
       propertyPath: aSource.Array.data[1]
       value: 
       objectReference: {fileID: 331954503}
-    - target: {fileID: 114216884432851496, guid: e011c18d2d20e824baf7fcb18671a05a,
-        type: 2}
-      propertyPath: masterMix
-      value: 
-      objectReference: {fileID: 24100000, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
-    - target: {fileID: 114216884432851496, guid: e011c18d2d20e824baf7fcb18671a05a,
-        type: 2}
-      propertyPath: mixSnaps.Array.data[0]
-      value: 
-      objectReference: {fileID: 24500006, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
-    - target: {fileID: 114216884432851496, guid: e011c18d2d20e824baf7fcb18671a05a,
-        type: 2}
-      propertyPath: mixSnaps.Array.data[1]
-      value: 
-      objectReference: {fileID: 245985926084443568, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
-    - target: {fileID: 114216884432851496, guid: e011c18d2d20e824baf7fcb18671a05a,
-        type: 2}
-      propertyPath: mixSnaps.Array.data[2]
-      value: 
-      objectReference: {fileID: 245305746108081812, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
-    - target: {fileID: 114216884432851496, guid: e011c18d2d20e824baf7fcb18671a05a,
-        type: 2}
-      propertyPath: mixSnaps.Array.data[3]
-      value: 
-      objectReference: {fileID: 245654444979556364, guid: 89c8feb9c81cb824b925076a0479254d,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e011c18d2d20e824baf7fcb18671a05a, type: 2}
   m_IsPrefabParent: 0

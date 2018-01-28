@@ -53,10 +53,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flock: {fileID: 114483471949879406, guid: ca3b77109f02c7d419f23f43dc10bf04, type: 2}
-  audioSpectrum: {fileID: 0}
   aSource:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 82340505784391136, guid: b6aeeca3b5b75dc44ab04231d63d0c33, type: 2}
+  - {fileID: 82402048759815182, guid: e55cfcecc3dda034b995aa18b0613b74, type: 2}
+  masterMix: {fileID: 24100000, guid: 89c8feb9c81cb824b925076a0479254d, type: 2}
 --- !u!114 &114926027408990280
 MonoBehaviour:
   m_ObjectHideFlags: 1
