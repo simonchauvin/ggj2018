@@ -13,11 +13,14 @@ public class PlayerManager : MonoBehaviour {
 
     private int currentAudio = -1;
 
-    public AudioSource[] aSource = new AudioSource[5];
+
+    public GameObject sounds;
+    private AudioSource[] aSource;
     public AudioManipulation[] audioManip = new AudioManipulation[5];
 
+    private int nbSounds = 2 ;
+
     public AudioMixer masterMix;
-    //int[] codeKeys = new int[37];
 
         struct BirdCommand
     {
@@ -35,18 +38,27 @@ public class PlayerManager : MonoBehaviour {
 
         currentAudio = -1;
 
+        aSource = sounds.GetComponentsInChildren<AudioSource>();
+        /*foreach(var source in aSource) {
+            Debug.Log(source.gameObject.name);
+        }*/
+
         /*for (int i = 0; i < aSource.Length; i++) {
             audioManip[i] = new AudioManipulation(aSource[i], 22000f, 10f, 0f);
             audioManip[i].initializeIt();
         }*/
+        /*attention on gère les inputs en prenant la longueur de ce tableau*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 15000, 10f, 0f, 0f, 1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 4010f, 500f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
-        audioManip[1] = new AudioManipulation(masterMix, aSource[1], 6000f, 1200f, 5f, 5f, 1.5f);
+        audioManip[1] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
         audioManip[1].initializeIt();
 
-        //aSource[0].GetComponent<AudioLowPassFilter>().enabled = true;
+        audioManip[2] = new AudioManipulation(masterMix, aSource[2], 500f, 10f, 0f, 0f, 1f);
+        audioManip[2].initializeIt();
+
+        nbSounds = 3;
     }
 
     void stopSound(AudioManipulation AM) {
@@ -68,8 +80,26 @@ public class PlayerManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         /*TODO change for Input action to allow for remapping*/
-
-        if (Input.GetKeyDown("c")) {
+        /*
+         
+        */
+        for(int ci = 0; ci<nbSounds ; ci++) {
+            if (Input.GetButtonDown("sound"+(ci+1))) {
+                if (currentAudio == ci) {
+                    stopSound(audioManip[currentAudio]);
+                    currentAudio = -1;
+                } else if (currentAudio != -1) {
+                    stopSound(audioManip[currentAudio]);
+                    currentAudio = ci;
+                    startSound(audioManip[currentAudio]);
+                } else {
+                    currentAudio = ci;
+                    startSound(audioManip[currentAudio]);
+                }
+            }
+        }
+        /*
+        if (Input.GetButtonDown("sound1")) {
             if(currentAudio == 0) {
                 stopSound(audioManip[currentAudio]);
                 currentAudio = -1;
@@ -83,7 +113,7 @@ public class PlayerManager : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown("v")) {
+        if (Input.GetButtonDown("sound2")) {
             if (currentAudio == 1) {
                 stopSound(audioManip[currentAudio]);
                 currentAudio = -1;
@@ -96,74 +126,75 @@ public class PlayerManager : MonoBehaviour {
                 startSound(audioManip[currentAudio]);
             }
         }
+        */
 
         if (currentAudio == -1) {
             return;
         }
 
-        if (Input.GetKey("a")) {
+        if (Input.GetButton("lowpassup")) {
             audioManip[currentAudio].lowPassUp();
         }
 
-        if (Input.GetKey("q")) {
+        if (Input.GetButton("lowpassdown")) {
             audioManip[currentAudio].lowPassDown();
         }
 
-        if (Input.GetKey("z")) {
+        if (Input.GetButton("highpassup")) {
             audioManip[currentAudio].highPassUp();
         }
 
-        if (Input.GetKey("s")) {
+        if (Input.GetButton("highpassdown")) {
             audioManip[currentAudio].highPassDown();
         }
 
-        if (Input.GetKey("e")) {
+        if (Input.GetButton("passup")) {
             audioManip[currentAudio].passUp();
         }
 
-        if (Input.GetKey("d")) {
+        if (Input.GetButton("passdown")) {
             audioManip[currentAudio].passDown();
         }
 
-        if (Input.GetKey("r")) {
+        if (Input.GetButton("passwidden")) {
             audioManip[currentAudio].passWidden();
         }
 
-        if (Input.GetKey("f")) {
+        if (Input.GetButton("passtighten")) {
             audioManip[currentAudio].passTighten();
         }
 
-        if (Input.GetKey("t")) {
+        if (Input.GetButton("tremblepass1")) {
             audioManip[currentAudio].tremble1();
         }
 
-        if (Input.GetKey("g")) {
+        if (Input.GetButton("tremblepass2")) {
             audioManip[currentAudio].tremble2();
         }
 
-        if (Input.GetKey("y")) {
+        if (Input.GetButton("pitchup")) {
             audioManip[currentAudio].pitchUp();
         }
 
-        if (Input.GetKey("h")) {
+        if (Input.GetButton("pitchdown")) {
             audioManip[currentAudio].pitchDown();
         }
 
-        if (Input.GetKey("u")) {
-            //audioManip[currentAudio].distortionDown();
+        if (Input.GetButton("pitchtremble1")) {
             audioManip[currentAudio].trembleP1();
         }
 
-        if (Input.GetKey("j")) {
-            //audioManip[currentAudio].distortionDown();
+        if (Input.GetButton("pitchtremble2")) {
             audioManip[currentAudio].trembleP2();
         }
+
+        audioManip[currentAudio].updateVolume();
 
         foreach (char c in Input.inputString) {
             //Debug.Log(c.ToString());
         }
     }
-
+    /*
     void sendBirdCommand(int[] idLeaders, int[] idGrids) {
         flock.transmissionListener(idLeaders, idGrids);
     }
@@ -172,4 +203,5 @@ public class PlayerManager : MonoBehaviour {
     void sendBirdCommand(BirdCommand bCommand) {
         flock.transmissionListener(bCommand.idLeaders, bCommand.idGrids);
     }
+    */
 }
