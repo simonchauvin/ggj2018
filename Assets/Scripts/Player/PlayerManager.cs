@@ -220,13 +220,13 @@ public class PlayerManager : MonoBehaviour {
         masterMix.GetFloat("highpassCutoff", out currentValueH);
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
 
-        if (currentValueH + currentValueL < 3000f) {
+        if (currentValueH + currentValueL < 5000f) {
             spawnGrid(3);
         }
         if (currentValueL - currentValueH < 1200f) {
             spawnGrid(2);
         }
-        if (currentValueH + currentValueL > 5000f) {
+        if (currentValueH + currentValueL > 6000f) {
             spawnGrid(4);
         }
     }
