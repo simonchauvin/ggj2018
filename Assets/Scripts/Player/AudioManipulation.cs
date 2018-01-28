@@ -269,7 +269,6 @@ public class AudioManipulation
 
 public static class AudioFadeOut
 {
-
     public static IEnumerator FadeOut(AudioManipulation AM, float FadeTime) {
         AudioSource audioSource = AM.audioSource;
         float startVolume = audioSource.volume;
