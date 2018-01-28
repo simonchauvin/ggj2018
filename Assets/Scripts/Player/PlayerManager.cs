@@ -31,13 +31,18 @@ public class PlayerManager : MonoBehaviour {
     private Dictionary<char,BirdCommand> binding = new Dictionary<char, BirdCommand>();
     private BirdCommand[] BirdsCommands = new BirdCommand[100];
 
+
+    void Awake() {
+        
+    }
+
     // Use this for initialization
     void Start () {
         leadersArray = flock.getLeadersArray();
         gridsArray = flock.getGridsArray();
 
+        audioSpectrum = GetComponent<AudioSpectrum>();
         currentAudio = -1;
-
         aSource = sounds.GetComponentsInChildren<AudioSource>();
         /*foreach(var source in aSource) {
             Debug.Log(source.gameObject.name);
@@ -52,13 +57,16 @@ public class PlayerManager : MonoBehaviour {
         audioManip[0] = new AudioManipulation(masterMix, aSource[0], 4010f, 500f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
-        audioManip[1] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
-        audioManip[1].initializeIt();
-
-        audioManip[2] = new AudioManipulation(masterMix, aSource[2], 500f, 10f, 0f, 0f, 1f);
+        audioManip[2] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
         audioManip[2].initializeIt();
 
-        nbSounds = 3;
+        audioManip[3] = new AudioManipulation(masterMix, aSource[2], 500f, 10f, 0f, 0f, 1f);
+        audioManip[3].initializeIt();
+
+        audioManip[1] = new AudioManipulation(masterMix, aSource[3], 4000f, 10f, 0f, 0f, 1f);
+        audioManip[1].initializeIt();
+
+        nbSounds = 4;
     }
 
     void stopSound(AudioManipulation AM) {
@@ -76,6 +84,15 @@ public class PlayerManager : MonoBehaviour {
         }
         AM.startSound();
     }
+
+    public float[] GetSpectrumData() {
+        float[] rawSpectrum = new float[audioSpectrum.numberOfSamples];
+        if (currentAudio != -1) { 
+            audioManip[currentAudio].audioSource.GetSpectrumData(rawSpectrum, 0, FFTWindow.BlackmanHarris);
+        }
+        return rawSpectrum;
+    }
+    /*AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);*/
 
     // Update is called once per frame
     void Update () {
