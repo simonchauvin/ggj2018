@@ -12,11 +12,22 @@ public class Flock : MonoBehaviour
     public float separationWeight;
     public float minAnimSpeed = 0.75f;
     public float maxAnimSpeed = 1.25f;
+    public float minTimeBetweenRandomWalk = 5;
+    public float maxTimeBetweenRandomWalk = 15;
+    public float boundRadius = 40f;
 
     private Boid leader;
     private NavfieldManager navfieldManager;
 
     private Boid[] boids;
+    private float randomWalkTime;
+    private float returnTime;
+    private float timeSinceLastRandomWalk;
+    private float timeSinceLastReturn;
+    private bool randomWalk;
+    private bool returnWalk;
+    private float timeSinceLastCheck;
+    private Vector3 target;
 
     public float debug1;
 
@@ -53,6 +64,16 @@ public class Flock : MonoBehaviour
             }
             boids[i].setNeighbors(neighbors);
         }
+
+        // Init
+        timeSinceLastCheck = 0f;
+        randomWalkTime = 0f;
+        returnTime = 0f;
+        timeSinceLastRandomWalk = 0f;
+        timeSinceLastReturn = 0f;
+        randomWalk = false;
+        returnWalk = false;
+        target = Vector3.zero;
     }
 
     void FixedUpdate()
@@ -65,38 +86,66 @@ public class Flock : MonoBehaviour
             {
                 if (boid.leader)
                 {
-                    // behaviour random balade dans une sphere
-                    // random delacement vers 0,0,0
+                    // Random walks
+                    if (randomWalk)
+                    {
+                        leader.thisRigidbody.velocity += (leader.transform.position - target).normalized * Time.deltaTime;
+                        if (timeSinceLastRandomWalk >= randomWalkTime)
+                        {
+                            checkLeaderWalk();
+                        }
+                        timeSinceLastRandomWalk += Time.deltaTime;
+                    }
+                    else if (returnWalk)
+                    {
+                        leader.thisRigidbody.velocity += (leader.transform.position - target).normalized * Time.deltaTime;
+                        if (timeSinceLastReturn >= returnTime)
+                        {
+                            checkLeaderWalk();
+                        }
+                        timeSinceLastReturn += Time.deltaTime;
+                    }
+                    else
+                    {
+                        if (timeSinceLastCheck >= 5f)
+                        {
+                            checkLeaderWalk();
+                            timeSinceLastReturn = 0f;
+                        }
+                        timeSinceLastCheck += Time.deltaTime;
+                    }
                 }
-
-                Vector3 following = follow(boid) * followWeight * Time.deltaTime;
-                Vector3 alignment = align(boid) * alignmentWeight * Time.deltaTime;
-                Vector3 cohesion = cohere(boid) * cohesionWeight * Time.deltaTime;
-                Vector3 separation = separate(boid) * separationWeight * Time.deltaTime;
-                if (GameManager.instance.debugBoids)
+                else
                 {
-                    boid.showFollowingDebug(following);
-                    boid.showAlignmentDebug(alignment);
-                    boid.showCohesionDebug(cohesion);
-                    boid.showSeparationDebug(separation);
-                }
-                
-                boid.thisRigidbody.velocity += (following + alignment + cohesion + separation);
-                //boid.thisRigidbody.AddForce(align(boid) * alignmentWeight);
-                //boid.thisRigidbody.AddForce(cohere(boid) * cohesionWeight);
-                //boid.thisRigidbody.AddForce(separate(boid) * separationWeight);
+                    Vector3 following = follow(boid) * followWeight * Time.deltaTime;
+                    Vector3 alignment = align(boid) * alignmentWeight * Time.deltaTime;
+                    Vector3 cohesion = cohere(boid) * cohesionWeight * Time.deltaTime;
+                    Vector3 separation = separate(boid) * separationWeight * Time.deltaTime;
+                    if (GameManager.instance.debugBoids)
+                    {
+                        boid.showFollowingDebug(following);
+                        boid.showAlignmentDebug(alignment);
+                        boid.showCohesionDebug(cohesion);
+                        boid.showSeparationDebug(separation);
+                    }
 
-                // Navfields
-                Navfield navfield = navfieldManager.getNavfield(boid.transform.position);
-                if (navfield != null)
-                {
-                    boid.applyNavfieldBehavior(navfield);
+                    boid.thisRigidbody.velocity += (following + alignment + cohesion + separation);
+                    //boid.thisRigidbody.AddForce(align(boid) * alignmentWeight);
+                    //boid.thisRigidbody.AddForce(cohere(boid) * cohesionWeight);
+                    //boid.thisRigidbody.AddForce(separate(boid) * separationWeight);
+
+                    // Navfields
+                    Navfield navfield = navfieldManager.getNavfield(boid.transform.position);
+                    if (navfield != null)
+                    {
+                        boid.applyNavfieldBehavior(navfield);
+                    }
                 }
 
                 //Guigui Fix
                 float peurDuSol = Mathf.Pow(8.0f - Mathf.Clamp(boid.transform.position.y, 0.0f, 8.0f), 2.0f);
-                
-                float vely = boid.thisRigidbody.velocity.y + Time.fixedDeltaTime*peurDuSol * Mathf.Abs(Mathf.Min(0,boid.thisRigidbody.velocity.y));
+
+                float vely = boid.thisRigidbody.velocity.y + Time.fixedDeltaTime * peurDuSol * Mathf.Abs(Mathf.Min(0, boid.thisRigidbody.velocity.y));
                 if (peurDuSol > 0 && vely < 5.0f)
                     vely += 15.0f * Time.fixedDeltaTime;
                 float speed = boid.thisRigidbody.velocity.magnitude;
@@ -107,6 +156,44 @@ public class Flock : MonoBehaviour
 
                 boid.thisRigidbody.velocity = boid.thisRigidbody.velocity.normalized * speed;
             }
+        }
+    }
+
+    private void checkLeaderWalk()
+    {
+        float alea = Random.value;
+        if (alea > 0.5f)
+        {
+            if (alea > 0.75f)
+            {
+                randomWalk = true;
+
+                Vector3 pos = Random.onUnitSphere * boundRadius;
+                if (pos.y < 0)
+                {
+                    pos.y = -pos.y;
+                }
+
+                target = pos;
+                randomWalkTime = Random.Range(minTimeBetweenRandomWalk, maxTimeBetweenRandomWalk);
+                timeSinceLastRandomWalk = 0f;
+
+                returnWalk = false;
+            }
+            else
+            {
+                returnWalk = true;
+                target = Vector3.zero;
+                returnTime = Random.Range(minTimeBetweenRandomWalk, maxTimeBetweenRandomWalk);
+                timeSinceLastReturn = 0f;
+
+                randomWalk = false;
+            }
+        }
+        else
+        {
+            randomWalk = false;
+            returnWalk = false;
         }
     }
 

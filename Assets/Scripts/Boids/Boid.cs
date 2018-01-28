@@ -88,7 +88,7 @@ public class Boid : MonoBehaviour
 
     private void boundPosition()
     {
-        if (Vector3.Distance(transform.localPosition, Vector3.zero) > 40f)
+        if (Vector3.Distance(transform.localPosition, Vector3.zero) > flock.boundRadius)
         {
             //thisRigidbody.AddForce((Vector3.zero - transform.localPosition) * 0.01f);
             thisRigidbody.velocity += (Vector3.zero - transform.localPosition) * 0.1f * Time.deltaTime;
@@ -97,7 +97,7 @@ public class Boid : MonoBehaviour
 
     private void warpPosition()
     {
-        if (Vector3.Distance(transform.localPosition, Vector3.zero) > 40f)
+        if (Vector3.Distance(transform.localPosition, Vector3.zero) > flock.boundRadius)
         {
             transform.localPosition = -transform.localPosition + (transform.localPosition - Vector3.zero).normalized;
         }

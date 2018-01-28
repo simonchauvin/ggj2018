@@ -46,6 +46,7 @@ public class NavfieldManager : MonoBehaviour
                     navfields.RemoveAt(i);
                     if (GameManager.instance.debugNavfields)
                     {
+                        debugNavfields[i].gameObject.SetActive(false);
                         debugNavfields.RemoveAt(i);
                     }
                 }
