@@ -19,6 +19,8 @@ public class AudioManipulation
     float ecartMin = 500f;
     private float freqMax = 15000f;
     private float freqMin = 10f;
+    private float pitchMin = 0f;
+    private float pitchMax = 2.5f;
 
     public float startVolume = 1f;
     public bool inFadeOut = false;
@@ -97,10 +99,10 @@ public class AudioManipulation
         masterMix.GetFloat(param, out currentValue);
         float newValue = currentValue + (sign * value);
 
-        if (newValue > 1.50f) {
-            newValue = 1.50f;
-        } else if (newValue < 0.50f) {
-            newValue = 0.50f;
+        if (newValue > pitchMax) {
+            newValue = pitchMax;
+        } else if (newValue < pitchMin) {
+            newValue = pitchMin;
         }
 
         masterMix.SetFloat(param, newValue);
@@ -309,16 +311,16 @@ public class AudioManipulation
         Debug.Log("currentPitch " + currentPitch);
         Debug.Log("value " + (pingpong3 - (amplitude / 2f)) * ppStep);
         
-        if ((currentPitch + (pingpong3 - (amplitude / 2f)) * ppStep < 0.5f)
-            || currentPitch + (pingpong3 - (amplitude / 2f)) * ppStep > 1.5f) {
+        if ((currentPitch + (pingpong3 - (amplitude / 2f)) * ppStep < pitchMin)
+            || currentPitch + (pingpong3 - (amplitude / 2f)) * ppStep > pitchMax) {
         } else {
             changeParamPitch("pitch", 1, (pingpong3 - (amplitude / 2f)) * ppStep);
         }
     }
 
     public void trembleP2() {
-        amplitude = 1f;
-        ppStep = 0.5f;
+        amplitude = 0.8f;
+        ppStep = 0.20f;
         float pingpong4 = Mathf.PingPong(Time.time, amplitude);
         float currentPitch;
         masterMix.GetFloat("pitch", out currentPitch);
@@ -327,8 +329,8 @@ public class AudioManipulation
         Debug.Log("currentPitch " + currentPitch);
         Debug.Log("value " + (pingpong4 - (amplitude / 2f)) * ppStep);
 
-        if ((currentPitch + (pingpong4 - (amplitude / 2f)) * ppStep < 0.5f)
-            || currentPitch + (pingpong4 - (amplitude / 2f)) * ppStep > 1.5f) {
+        if ((currentPitch + (pingpong4 - (amplitude / 2f)) * ppStep < pitchMin)
+            || currentPitch + (pingpong4 - (amplitude / 2f)) * ppStep > pitchMax) {
         } else {
             changeParamPitch("pitch", 1, (pingpong4 - (amplitude / 2f)) * ppStep);
         }

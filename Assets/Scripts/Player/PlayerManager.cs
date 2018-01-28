@@ -70,26 +70,31 @@ public class PlayerManager : MonoBehaviour {
         /*TODO change for Input action to allow for remapping*/
 
         if (Input.GetKeyDown("c")) {
-            if (currentAudio != -1) {
+            if(currentAudio == 0) {
                 stopSound(audioManip[currentAudio]);
+                currentAudio = -1;
+            }else if (currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+                currentAudio = 0;
+                startSound(audioManip[currentAudio]);
+            } else {
+                currentAudio = 0;
+                startSound(audioManip[currentAudio]);
             }
-            currentAudio = 0 ;
-            startSound(audioManip[currentAudio]);
         }
 
         if (Input.GetKeyDown("v")) {
-            if(currentAudio != -1) {
+            if (currentAudio == 1) {
                 stopSound(audioManip[currentAudio]);
-            }
-            currentAudio = 1;
-            startSound(audioManip[currentAudio]);
-        }
-
-        if (Input.GetKeyUp("c") || Input.GetKeyUp("v")) {
-            if (currentAudio != -1) {
+                currentAudio = -1;
+            } else if (currentAudio != -1) {
                 stopSound(audioManip[currentAudio]);
+                currentAudio = 1;
+                startSound(audioManip[currentAudio]);
+            } else {
+                currentAudio = 1;
+                startSound(audioManip[currentAudio]);
             }
-            currentAudio = -1;
         }
 
         if (currentAudio == -1) {
