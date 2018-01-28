@@ -62,6 +62,10 @@ public class AudioSpectrum : MonoBehaviour
     }
     #endregion
 
+    #region Nak Add
+    private PlayerManager PM;
+    #endregion
+
     #region Private functions
     void CheckBuffers ()
     {
@@ -87,13 +91,15 @@ public class AudioSpectrum : MonoBehaviour
     void Awake ()
     {
         CheckBuffers ();
+        PM = GetComponent<PlayerManager>(); /*NK ADD*/
     }
 
     void Update ()
     {
         CheckBuffers ();
 
-        AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);
+        /*AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);*/
+        rawSpectrum = PM.GetSpectrumData(); /*NK CHANGE*/
 
         float[] middlefrequencies = middleFrequenciesForBands [(int)bandType];
         var bandwidth = bandwidthForBands [(int)bandType];

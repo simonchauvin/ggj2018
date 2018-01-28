@@ -31,13 +31,18 @@ public class PlayerManager : MonoBehaviour {
     private Dictionary<char,BirdCommand> binding = new Dictionary<char, BirdCommand>();
     private BirdCommand[] BirdsCommands = new BirdCommand[100];
 
+
+    void Awake() {
+        
+    }
+
     // Use this for initialization
     void Start () {
         leadersArray = flock.getLeadersArray();
         gridsArray = flock.getGridsArray();
 
+        audioSpectrum = GetComponent<AudioSpectrum>();
         currentAudio = -1;
-
         aSource = sounds.GetComponentsInChildren<AudioSource>();
         /*foreach(var source in aSource) {
             Debug.Log(source.gameObject.name);
@@ -76,6 +81,15 @@ public class PlayerManager : MonoBehaviour {
         }
         AM.startSound();
     }
+
+    public float[] GetSpectrumData() {
+        float[] rawSpectrum = new float[audioSpectrum.numberOfSamples];
+        if (currentAudio != -1) { 
+            audioManip[currentAudio].audioSource.GetSpectrumData(rawSpectrum, 0, FFTWindow.BlackmanHarris);
+        }
+        return rawSpectrum;
+    }
+    /*AudioListener.GetSpectrumData (rawSpectrum, 0, FFTWindow.BlackmanHarris);*/
 
     // Update is called once per frame
     void Update () {

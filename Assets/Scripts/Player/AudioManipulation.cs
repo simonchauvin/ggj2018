@@ -152,7 +152,7 @@ public class AudioManipulation
         masterMix.GetFloat("highpassCutoff", out currentValueH);
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
         float stepItH = stepFunc(currentValueH);
-        if ((currentValueL + stepItH) - (currentValueH - stepItH) <= minPass) {
+        if ((currentValueL + stepItH) - (currentValueH - stepItH) >= minPass) {
         } else if (currentValueH - stepItH < freqMin) {
             changeParamPass("lowpassCutoff", 1, stepItH * 2f);
         } else if (currentValueL + stepItH > freqMax) {
@@ -188,8 +188,8 @@ public class AudioManipulation
 
 
     public void tremble1() {
-        amplitude = 0.2f;
-        ppStep = 1000f;
+        amplitude = 0.5f;
+        ppStep = 500f;
         float pingpong = Mathf.PingPong(Time.time, amplitude);
 
         float currentValueH;
@@ -206,7 +206,7 @@ public class AudioManipulation
     }
 
     public void tremble2() {
-        amplitude = 0.5f;
+        amplitude = 1f;
         ppStep = 500f;
         float pingpong2 = Mathf.PingPong(Time.time, amplitude);
 
