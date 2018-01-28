@@ -259,11 +259,24 @@ public class AudioManipulation
         float total = currentValueH + currentValueL;
         float currentVolume;
         masterMix.GetFloat("volume", out currentVolume);
-        Debug.Log("currentVol " + currentVolume);
+        //Debug.Log("currentVol " + currentVolume);
         float t = Mathf.InverseLerp(freqMin, freqMax*2f, total) ;
         float newVolume = Mathf.Lerp(-10, 30, t);
 
         masterMix.SetFloat("volume", Mathf.Min(Mathf.Max(newVolume,-5f),20f));
+
+        Debug.Log("avg Vol " + GetAveragedVolume());
+
+    }
+
+    float GetAveragedVolume() {
+        float[] data = new float[256];
+        float a = 0;
+        audioSource.GetOutputData(data, 0);
+        foreach (float s in data) {
+            a += Mathf.Abs(s);
+        }
+        return a / 256;
     }
 }
 
