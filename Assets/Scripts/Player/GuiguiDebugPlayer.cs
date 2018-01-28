@@ -12,9 +12,9 @@ public class GuiguiDebugPlayer : MonoBehaviour {
 	// Update is called once per frame 
 	void Update () {
         if(Input.GetButtonDown("Fire1")) 
-            flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal,1.0f);
+            flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal,3.0f);
         if (Input.GetButtonDown("Fire2"))
-            flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.gathering, 1.0f);
+            flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.gathering, 3.0f);
 
     }
 }
