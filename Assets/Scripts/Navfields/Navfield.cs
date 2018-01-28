@@ -78,6 +78,73 @@ public class Navfield
                     }
                 }
                 break;
+            case NavFieldPrimitives.horizontal_compressor:
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        for (int k = 0; k < size; k++)
+                        {
+                            forces[i, j, k] = manager.force * -new Vector3((i - (size * 0.5f)) / (size * 0.5f), 0, 0);
+                        }
+                    }
+                }
+                break;
+            case NavFieldPrimitives.vertical_compressor:
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        for (int k = 0; k < size; k++)
+                        {
+                            forces[i, j, k] = manager.force * -new Vector3(0, (j - (size * 0.5f)) / (size * 0.5f), 0);
+                        }
+                    }
+                }
+                break;
+            case NavFieldPrimitives.ascension:
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        for (int k = 0; k < size; k++)
+                        {
+                            forces[i, j, k] = manager.force * new Vector3(0, 1, 0);
+                        }
+                    }
+                }
+                break;
+            case NavFieldPrimitives.descent:
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        for (int k = 0; k < size; k++)
+                        {
+                            forces[i, j, k] = manager.force * -new Vector3(0, 1, 0);
+                        }
+                    }
+                }
+                break;
+            case NavFieldPrimitives.tube:
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        for (int k = 0; k < size; k++)
+                        {
+                            if (i - (size * 0.5f) < 0)
+                            {
+                                forces[i, j, k] = manager.force * new Vector3(1, 1, 0);
+                            }
+                            else
+                            {
+                                forces[i, j, k] = manager.force * new Vector3(-1, 1, 0);
+                            }
+                        }
+                    }
+                }
+                break;
         }
     }
 
