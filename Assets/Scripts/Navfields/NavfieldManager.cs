@@ -5,6 +5,9 @@ using UnityEngine;
 public class NavfieldManager : MonoBehaviour
 {
     public Transform debugPrefab;
+    public int size;
+    public float cellSize;
+    public float force;
 
     private List<Navfield> navfields;
 
@@ -52,32 +55,32 @@ public class NavfieldManager : MonoBehaviour
 
     public void addNavfield(Flock flock, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
-        navfields.Add(new Navfield(flock, orientation, primitive, duration));
+        navfields.Add(new Navfield(this, flock, orientation, primitive, duration));
         if (GameManager.instance.debugNavfields)
         {
             debugNavfields.Add(Instantiate<Transform>(debugPrefab));
             debugNavfields[debugNavfields.Count - 1].position = flock.getLeader().transform.position;
-            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(Navfield.SIZE, Navfield.SIZE, Navfield.SIZE);
+            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
         }
     }
 
     public void addNavfield(Boid leader, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
-        navfields.Add(new Navfield(leader, orientation, primitive, duration));
+        navfields.Add(new Navfield(this, leader, orientation, primitive, duration));
         if (GameManager.instance.debugNavfields)
         {
             debugNavfields.Add(Instantiate<Transform>(debugPrefab));
-            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(Navfield.SIZE, Navfield.SIZE, Navfield.SIZE);
+            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
         }
     }
 
     public void addNavfield(Vector3 position, Quaternion orientation, NavFieldPrimitives primitive, float duration)
     {
-        navfields.Add(new Navfield(position, orientation, primitive, duration));
+        navfields.Add(new Navfield(this, position, orientation, primitive, duration));
         if (GameManager.instance.debugNavfields)
         {
             debugNavfields.Add(Instantiate<Transform>(debugPrefab));
-            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(Navfield.SIZE, Navfield.SIZE, Navfield.SIZE);
+            debugNavfields[debugNavfields.Count - 1].localScale = new Vector3(size, size, size);
         }
     }
 
