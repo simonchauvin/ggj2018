@@ -17,7 +17,7 @@ public class AudioManipulation
     private float freqMin = 10f;
     private float pitchMin = 0f;
     private float pitchMax = 2.5f;
-    private float minPass = 4000f;
+    private float minPass = 6000f; /*le max en fait*/
 
     public float startVolume = 1f;
     public bool inFadeOut = false;

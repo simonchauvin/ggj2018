@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviour {
         }*/
         /*attention on gère les inputs en prenant la longueur de ce tableau*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 22000f, 10f, 0f, 0f, 1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 12000f, 10f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
         audioManip[2] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
@@ -100,7 +100,14 @@ public class PlayerManager : MonoBehaviour {
         /*
          
         */
-        for(int ci = 0; ci<nbSounds ; ci++) {
+        if (Input.GetButton("Jump")) {
+            if (currentAudio != -1) {
+                stopSound(audioManip[currentAudio]);
+                currentAudio = -1;
+            }
+        }
+
+        for (int ci = 0; ci<nbSounds ; ci++) {
             if (Input.GetButtonDown("sound"+(ci+1))) {
                 if (currentAudio == ci) {
                     stopSound(audioManip[currentAudio]);
