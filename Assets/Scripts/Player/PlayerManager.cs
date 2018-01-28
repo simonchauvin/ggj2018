@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 
 public class PlayerManager : MonoBehaviour {
@@ -42,6 +43,7 @@ public class PlayerManager : MonoBehaviour {
         gridsArray = flock.getGridsArray();
 
         audioSpectrum = GetComponent<AudioSpectrum>();
+        initializeCheckSound();
         currentAudio = -1;
         aSource = sounds.GetComponentsInChildren<AudioSource>();
         /*foreach(var source in aSource) {
@@ -54,7 +56,7 @@ public class PlayerManager : MonoBehaviour {
         }*/
         /*attention on gère les inputs en prenant la longueur de ce tableau*/
 
-        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 12000f, 10f, 0f, 0f, 1f);
+        audioManip[0] = new AudioManipulation(masterMix, aSource[0], 8000f, 10f, 0f, 0f, 1f);
         audioManip[0].initializeIt();
 
         audioManip[2] = new AudioManipulation(masterMix, aSource[1], 6000f, 2100f, 5f, 5f, 1.5f);
@@ -192,6 +194,31 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    void spawnGrid() {
+        Vector3 bary = flock.getBarycenter();
+        flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal, 3.0f);
+        /*NavFieldPrimitives.gathering*/
+    }
+
+    private float rmsValue;
+    private float dbValue;
+    private float pitchValue;
+    private float refValue = 0.1f;
+    private float threshold = 0.01f;
+
+
+    private List<Peak> peaks = new List<Peak>();
+    int samplerate;
+
+    public Text txtdisplay; // drag a Text object here to display values
+
+    void initializeCheckSound() {
+        samplerate = AudioSettings.outputSampleRate;
+    }
+
+    private float previousPitch;
+    private float cumulatePitchVelocity;
+
     void checkSound() {
         string levels = "";
         string peaks = "";
@@ -201,10 +228,69 @@ public class PlayerManager : MonoBehaviour {
             peaks += audioSpectrum.PeakLevels[i] + ", ";
             means += audioSpectrum.MeanLevels[i] + ", ";
         }
+        float[] spectrum = new float[1024];
+        float[] samples = new float[1024];
+        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
+        AudioListener.GetOutputData(samples, 0);
+        AnalyzeSound(samples, spectrum);
+        if (txtdisplay != null) {
+            txtdisplay.text = "RMS: " + rmsValue.ToString("F2") +
+                " (" + dbValue.ToString("F1") + " dB)\n" +
+                "Pitch: " + pitchValue.ToString("F0") + " Hz";
+        }
+        /*Debug.Log("RMS: " + rmsValue.ToString("F2") +
+                " (" + dbValue.ToString("F1") + " dB)\n" +
+                "Pitch: " + pitchValue.ToString("F0") + " Hz");*/
+
+        float velocityPitch = (pitchValue - previousPitch) / Time.deltaTime;
+        cumulatePitchVelocity = Mathf.Max(cumulatePitchVelocity, cumulatePitchVelocity-(cumulatePitchVelocity / 200f)*Time.deltaTime);
+        cumulatePitchVelocity += velocityPitch*Time.deltaTime;
+        previousPitch = pitchValue ;
+        Debug.Log(cumulatePitchVelocity);
+
         /*Debug.Log("levels : "+levels);
         Debug.Log("peaks : " + peaks);
         Debug.Log("means : " + means);*/
+    }
 
+    void AnalyzeSound(float[] samples, float[] spectrum) {
+        int qSamples = samples.Length;
+
+        /*sound data*/
+        int i = 0;
+        float sum = 0f;
+        for (i = 0; i < qSamples; i++) {
+            sum += samples[i] * samples[i]; // sum squared samples
+        }
+        rmsValue = Mathf.Sqrt(sum / qSamples); // rms = square root of average
+        dbValue = 20 * Mathf.Log10(rmsValue / refValue); // calculate dB
+        if (dbValue < -160) dbValue = -160; // clamp it to -160dB min
+
+        /*sound spectrum*/
+        float maxV = 0f;
+        for (i = 0; i < qSamples; i++) { // find max
+            if (spectrum[i] > maxV && spectrum[i] > threshold) {
+                peaks.Add(new Peak(spectrum[i], i));
+                if (peaks.Count > 5) { // get the 5 peaks in the sample with the highest amplitudes
+                    peaks.Sort(new AmpComparer()); // sort peak amplitudes from highest to lowest
+                                                    //peaks.Remove (peaks [5]); // remove peak with the lowest amplitude
+                }
+            }
+        }
+        float freqN = 0f;
+        if (peaks.Count > 0) {
+            //peaks.Sort (new IndexComparer ()); // sort indices in ascending order
+            maxV = peaks[0].amplitude;
+            int maxN = peaks[0].index;
+            freqN = maxN; // pass the index to a float variable
+            if (maxN > 0 && maxN < qSamples - 1) { // interpolate index using neighbours
+                var dL = spectrum[maxN - 1] / spectrum[maxN];
+                var dR = spectrum[maxN + 1] / spectrum[maxN];
+                freqN += 0.5f * (dR * dR - dL * dL);
+            }
+        }
+        pitchValue = freqN * (samplerate / 2f) / qSamples; // convert index to frequency
+        peaks.Clear();
     }
 
     /*
@@ -217,4 +303,34 @@ public class PlayerManager : MonoBehaviour {
         flock.transmissionListener(bCommand.idLeaders, bCommand.idGrids);
     }
     */
+}
+
+class Peak
+{
+    public float amplitude;
+    public int index;
+
+    public Peak() {
+        amplitude = 0f;
+        index = -1;
+    }
+
+    public Peak(float _frequency, int _index) {
+        amplitude = _frequency;
+        index = _index;
+    }
+}
+
+class AmpComparer : IComparer<Peak>
+{
+    public int Compare(Peak a, Peak b) {
+        return 0 - a.amplitude.CompareTo(b.amplitude);
+    }
+}
+
+class IndexComparer : IComparer<Peak>
+{
+    public int Compare(Peak a, Peak b) {
+        return a.index.CompareTo(b.index);
+    }
 }

@@ -263,7 +263,7 @@ public class AudioManipulation
         float t = Mathf.InverseLerp(freqMin, freqMax*2f, total) ;
         float newVolume = Mathf.Lerp(-10, 30, t);
 
-        masterMix.SetFloat("volume", Mathf.Min(Mathf.Max(newVolume,-5f),20f));
+        masterMix.SetFloat("volume", Mathf.Min(Mathf.Max(newVolume,-5f),10f));
     }
 }
 

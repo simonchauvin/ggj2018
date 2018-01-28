@@ -14,12 +14,8 @@ public class SetBird : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(Leader == null)
-        {
-            Leader = FlockSystem.GetComponent<Flock>().getLeader().transform;
-        }
-        else
-            ObjectTrackedByCamera.position = Vector3.Lerp(ObjectTrackedByCamera.position,Leader.position,0.5f);
+
+            ObjectTrackedByCamera.position = Vector3.Lerp(ObjectTrackedByCamera.position, FlockSystem.GetComponent<Flock>().getBarycenter(), 0.5f);
 
     }
 }
