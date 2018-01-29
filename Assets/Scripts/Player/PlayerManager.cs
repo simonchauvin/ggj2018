@@ -107,7 +107,7 @@ public class PlayerManager : MonoBehaviour {
             if (currentAudio != -1) {
                 stopSound(audioManip[currentAudio]);
                 currentAudio = -1;
-                spawnGrid(1);
+                spawnGrid(NavFieldPrimitives.dispersal,"jump");
             }
         }
 
@@ -123,7 +123,7 @@ public class PlayerManager : MonoBehaviour {
                 } else {
                     currentAudio = ci;
                     startSound(audioManip[currentAudio]);
-                    spawnGrid(2);
+                    spawnGrid(NavFieldPrimitives.tube, "sound" + (ci + 1));
                 }
             }
         }
@@ -158,48 +158,44 @@ public class PlayerManager : MonoBehaviour {
 
         if (Input.GetButton("passwidden")) {
             audioManip[currentAudio].passWidden();
-            spawnSoundGrid(1);
+            spawnGrid(NavFieldPrimitives.dispersal, "passwidden");
         }
 
         if (Input.GetButton("passtighten")) {
             audioManip[currentAudio].passTighten();
-            spawnSoundGrid(2);
+            spawnGrid(NavFieldPrimitives.gathering, "passtighten");
         }
 
         if (Input.GetButton("tremblepass1")) {
             audioManip[currentAudio].tremble1();
-            spawnSoundGrid(1);
+            spawnGrid(NavFieldPrimitives.horizontal_compressor, "tremblepass1");
         }
 
         if (Input.GetButton("tremblepass2")) {
             audioManip[currentAudio].tremble2();
-            spawnSoundGrid(1);
+            spawnGrid(NavFieldPrimitives.vertical_compressor, "tremblepass2");
         }
 
         if (Input.GetButton("pitchup")) {
             audioManip[currentAudio].pitchUp();
-            spawnSoundGrid(1);
+            spawnGrid(NavFieldPrimitives.ascension, "pitchup");
         }
 
         if (Input.GetButton("pitchdown")) {
             audioManip[currentAudio].pitchDown();
-            spawnSoundGrid(1);
+            spawnGrid(NavFieldPrimitives.descent, "pitchdown");
         }
 
         if (Input.GetButton("pitchtremble1")) {
             audioManip[currentAudio].trembleP1();
-            spawnGrid(1);
-            spawnGrid(2);
-            spawnGrid(3);
-            spawnGrid(4);
+            spawnGrid(NavFieldPrimitives.dispersal, "pitchtremble1");
+            spawnGrid(NavFieldPrimitives.tube, "pitchtremble1");
         }
 
         if (Input.GetButton("pitchtremble2")) {
             audioManip[currentAudio].trembleP2();
-            spawnGrid(1);
-            spawnGrid(2);
-            spawnGrid(3);
-            spawnGrid(4);
+            spawnGrid(NavFieldPrimitives.ascension, "pitchtremble1");
+            spawnGrid(NavFieldPrimitives.tube, "pitchtremble1");
         }
 
         audioManip[currentAudio].updateVolume();
@@ -220,55 +216,80 @@ public class PlayerManager : MonoBehaviour {
         masterMix.GetFloat("highpassCutoff", out currentValueH);
         masterMix.GetFloat("lowpassCutoff", out currentValueL);
 
-        if (currentValueH + currentValueL < 5000f) {
-            spawnGrid(3);
+        /*if (currentValueH + currentValueL < 5000f) {
+            spawnGrid(3, "currentValueH + currentValueL < 5000f");
         }
         if (currentValueL - currentValueH < 1200f) {
-            spawnGrid(2);
+            spawnGrid(2, "currentValueL - currentValueH < 1200f");
         }
         if (currentValueH + currentValueL > 6000f) {
-            spawnGrid(4);
-        }
+            spawnGrid(4, "currentValueH + currentValueL > 6000f");
+        }*/ 
     }
 
     float lastInputGrid = 0f;
 
-    void spawnSoundGrid(int inputType) {
+    void spawnSoundGrid(int inputType,string from) {
         if (currentAudio == -1) return;
 
         if (lastInputGrid <= Time.time) { 
             if (inputType == 1) {
-                spawnGrid(4);
+                spawnGrid(NavFieldPrimitives.ascension, from);
             } else if (inputType == 2) {
-                spawnGrid(2);
+                spawnGrid(NavFieldPrimitives.gathering, from);
             } else {
-                spawnGrid(3);
+                spawnGrid(NavFieldPrimitives.descent, from);
             }
-            lastInputGrid = Time.time + 0.5f;
+            lastInputGrid = Time.time + 1.0f;
         }
     }
 
-    void spawnGrid(int version) {
-        if (currentAudio == -1) return;
+    float lastSpawnGrid = 0f;
+    NavFieldPrimitives lastSpawnVersion = NavFieldPrimitives.gathering;
 
+    void spawnGrid(NavFieldPrimitives version,string from) {
+        if (currentAudio == -1) return;
+        if (lastSpawnGrid > Time.time && version == lastSpawnVersion) return;
+
+        lastSpawnVersion = version;
         switch (version) {
-            case 1:
-                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal, 3.0f);
-                Debug.Log("dispersal");
+            case NavFieldPrimitives.dispersal:
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.dispersal, 1.0f);
+                lastSpawnGrid = Time.time + 1.0f;
+                Debug.Log("dispersal" + " from " + from);
                 break;
-            case 2:
-                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.gathering, 3.0f);
-                Debug.Log("gathering");
+            case NavFieldPrimitives.gathering:
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.gathering, 1.0f);
+                Debug.Log("gathering" + " from " + from);
+                lastSpawnGrid = Time.time + 1.0f;
                 break;
-            case 3: /*descendre*/
-                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.descent, 3.0f);
-                Debug.Log("descendre");
+            case NavFieldPrimitives.descent: /*descendre*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.descent, 1.0f);
+                Debug.Log("descendre" + " from " + from);
+                lastSpawnGrid = Time.time + 1.0f;
                 break;
-            case 4: /*monter*/
-                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.ascension, 3.0f);
-                Debug.Log("monter");
+            case NavFieldPrimitives.ascension: /*monter*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.ascension, 1.0f);
+                Debug.Log("monter "+" from "+ from);
+                lastSpawnGrid = Time.time + 1.0f;
+                break;
+            case NavFieldPrimitives.tube: /*tube*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.tube, 1.0f);
+                Debug.Log("tube " + " from " + from);
+                lastSpawnGrid = Time.time + 1.0f;
+                break;
+            case NavFieldPrimitives.horizontal_compressor: /*horizontal_compressor*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.horizontal_compressor, 1.0f);
+                Debug.Log("horizontal_compressor " + " from " + from);
+                lastSpawnGrid = Time.time + 1.0f;
+                break;
+            case NavFieldPrimitives.vertical_compressor: /*vertical_compressor*/
+                flock.GetComponent<NavfieldManager>().addNavfield(flock, flock.getLeader().transform.rotation, NavFieldPrimitives.vertical_compressor, 1.0f);
+                Debug.Log("vertical_compressor " + " from " + from);
+                lastSpawnGrid = Time.time + 1.0f;
                 break;
         }
+
     }
 
     private float rmsValue;
